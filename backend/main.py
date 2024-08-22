@@ -26,6 +26,11 @@ async def read_root():
     return {"status": "get root success"}
 
 
+@app.post("/initialize_db_and_tables")
+def initialize_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
 @app.get("/consoles")
 async def get_all_consoles():
     with Session(engine) as session:
@@ -74,3 +79,7 @@ async def add_new_consoles(data: Games):
             session.add(new_game)
             session.commit()
             return {"status": "post games success"}
+
+
+if __name__ == "__main__":
+    create_db_and_tables()

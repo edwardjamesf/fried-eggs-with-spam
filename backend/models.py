@@ -10,7 +10,7 @@ class Consoles(SQLModel, table=True):
     release_date: str | None = None
     description: str | None = None
     image_path: str | None = None
-    # games: list["Games"] = Relationship(back_populates="id")
+    games: list["Games"] = Relationship(back_populates="console")
 
 
 class Games(SQLModel, table=True):
@@ -22,4 +22,5 @@ class Games(SQLModel, table=True):
     release_date: str | None = None
     description: str | None = None
     image_path: str | None = None
-    # fk_games_consoles: int | None = Field(default=None, foreign_key="consoles.id")
+    console: Consoles | None = Relationship(back_populates="games")
+    fk_games_consoles: int | None = Field(default=None, foreign_key="consoles.id")
