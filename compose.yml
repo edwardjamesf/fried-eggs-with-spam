@@ -29,7 +29,10 @@ services:
     container_name: backend
     restart: unless-stopped
     environment:
-      PORT: 8000
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_IP_PORT: ${POSTGRES_IP_PORT}
     ports:
       - "8000:8000"
     depends_on:
