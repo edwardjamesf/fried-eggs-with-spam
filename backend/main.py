@@ -10,7 +10,10 @@ def create_db_and_tables():
 
 
 app = FastAPI()
-origins = ["http://localhost:4000"]
+origins = [
+    "http://localhost:4000",
+    "http://0.0.0.0:4000",
+    ]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
