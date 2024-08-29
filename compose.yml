@@ -26,6 +26,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
   backend:
     image: edwardjamesf/fews-fastapi:latest
+    build:
+      dockerfile: backend/dockerfile
     container_name: backend
     restart: unless-stopped
     environment:
@@ -41,6 +43,8 @@ services:
         restart: true
   frontend:
     image: edwardjamesf/fews-vite-dist:latest
+    build:
+      dockerfile: frontend/dockerfile
     container_name: frontend
     restart: unless-stopped
     ports:
