@@ -1,15 +1,17 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, Select, SelectChangeEvent, Stack } from '@mui/material';
 
 export default function GameForm() {
   const [open, setOpen] = React.useState(false);
+  const [consoleName, setConsoleName] = React.useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,12 +21,17 @@ export default function GameForm() {
     setOpen(false);
   };
 
+  const handleConsoleSelect = (event: SelectChangeEvent) => {
+    setConsoleName(event.target.value)
+  }
+
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen} sx={{margin:"10px"}}>
+      <Button variant='outlined' onClick={handleClickOpen} sx={{margin:'10px'}}>
         Add New Game
       </Button>
       <Dialog
+        autoFocus
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -40,48 +47,54 @@ export default function GameForm() {
       >
         <DialogTitle>New Game</DialogTitle>
         <DialogContent>
-          <DialogContentText marginBottom={"15px"}>
+          <DialogContentText marginBottom={'15px'}>
             Enter in game information:
           </DialogContentText>
-          <Stack sx={{ width: "100%" }} spacing={2}>
+          <Stack sx={{ width: '100%' }} spacing={2}>
             <TextField
-              autoFocus
               required
-              helperText="Name*"
-              id="game_name_field"
-              name="name"
-              type="text"
+              helperText='Name*'
+              id='game_name_field'
+              name='name'
+              type='text'
+            />
+            <FormControl>
+              <InputLabel id='game_console_name_field'></InputLabel>
+              <Select
+                labelId='game_console_name_field_label'
+                id='game_console_name_field'
+                value={consoleName}
+                label='Console'
+                onChange={handleConsoleSelect}
+              >
+                <MenuItem value=''><em>None</em></MenuItem>
+                
+              </Select>
+              <FormHelperText>Console</FormHelperText>
+            </FormControl>
+            <TextField
+              helperText='Publisher'
+              id='game_publisher_field'
+              name='publisher'
+              type='text'
             />
             <TextField
-              autoFocus
-              required
-              helperText="Publisher*"
-              id="game_publisher_field"
-              name="publisher"
-              type="text"
+              helperText='Developer'
+              id='game_developer_field'
+              name='developer'
+              type='text'
             />
             <TextField
-              autoFocus
-              required
-              helperText="Developer*"
-              id="game_developer_field"
-              name="developer"
-              type="text"
+              helperText='Release Date'
+              id='game_release_date_field'
+              name='release_date'
+              type='date'
             />
             <TextField
-              autoFocus
-              required
-              helperText="Release Date*"
-              id="game_release_date_field"
-              name="release_date"
-              type="date"
-            />
-            <TextField
-              autoFocus
-              helperText="Description"
-              id="game_description_field"
-              name="description"
-              type="text"
+              helperText='Description'
+              id='game_description_field'
+              name='description'
+              type='text'
               multiline
               rows={4}
             />
@@ -89,7 +102,7 @@ export default function GameForm() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Submit</Button>
+          <Button type='submit'>Submit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

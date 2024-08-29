@@ -25,7 +25,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
   backend:
-    image: edwardjamesf/fews-fastapi:0.0.0
+    image: edwardjamesf/fews-fastapi:latest
     container_name: backend
     restart: unless-stopped
     environment:
@@ -37,5 +37,15 @@ services:
       - "8000:8000"
     depends_on:
       db:
+        condition: service_healthy
+        restart: true
+  frontend:
+    image: edwardjamesf/fews-vite-dist:latest
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db:
         condition: service_healthy
         restart: true

@@ -1,19 +1,19 @@
-import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
-import { Favorite, Home, Insights } from "@mui/icons-material";
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState } from 'react';
+import { Favorite, Home, Insights } from '@mui/icons-material';
 
 export default function NavBar() {
-  const mainMenuOpts = ["Home", "Wishlist", "Metrics"];
+  const mainMenuOpts = ['Home', 'Wishlist', 'Metrics'];
   const mainMenuIcons = [<Home />, <Favorite />, <Insights />];
 
   const [openMainMenu, setOpenMainMenu] = useState(false);
 
   const MainMenu = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpenMainMenu(false)}>
+    <Box sx={{ width: 250 }} role='presentation' onClick={() => setOpenMainMenu(false)}>
       <List>
         {mainMenuOpts.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={() => alert("UNDER CONSTRUCTION")}>
+          <ListItem key={text} disablePadding onClick={() => alert('UNDER CONSTRUCTION')}>
             <ListItemButton>
               <ListItemIcon>
                 {mainMenuIcons[index]}

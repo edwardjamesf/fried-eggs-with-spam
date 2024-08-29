@@ -1,4 +1,4 @@
-import Console from "../models/Console";
+import Console from '../models/Console';
 
 export async function handleError(error: Error) : Promise<void> {
   console.log(error)
@@ -9,10 +9,10 @@ export async function getConsoleData(
   setConsoleData: (param: Console[]) => void
 ) {
   try {
-    const response = await fetch("http://localhost:8000/consoles", {
-      method: "GET",
+    const response = await fetch('http://192.168.86.241:8000/consoles', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       }
     });
 
@@ -34,10 +34,10 @@ export async function addConsoles(
   consoles: {}
 ) {
   try {
-    const response = await fetch("http://localhost:8000/consoles", {
-      method: "POST",
+    const response = await fetch('http://192.168.86.241:8000/consoles', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(consoles),
     });
@@ -47,6 +47,6 @@ export async function addConsoles(
     }
   } catch (error) {
     handleError(error as Error)
-    return {"message": "Failed to add console to DB."}
+    return {'message': 'Failed to add console to DB.'}
   }
 }

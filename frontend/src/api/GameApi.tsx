@@ -1,4 +1,4 @@
-import Game from "../models/Game";
+import Game from '../models/Game';
 
 export async function handleError(error: Error) : Promise<void> {
   console.log(error)
@@ -9,10 +9,10 @@ export default async function getGameData(
   setGameData: (param: Game[]) => void
 ) {
   try {
-    const response = await fetch("http://localhost:8000/games", {
-      method: "GET",
+    const response = await fetch('http://192.168.86.241:8000/games', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       }
     });
 

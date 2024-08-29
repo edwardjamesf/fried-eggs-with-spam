@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { getConsoleData } from "../../api/ConsoleApi";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import Console from "../../models/Console";
+import { useEffect, useState } from 'react';
+import { getConsoleData } from '../../api/ConsoleApi';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import Console from '../../models/Console';
 
 export default function ConsoleTable() {
   const [consoleData, setConsoleData] = useState<Console[]>([])
@@ -18,7 +18,7 @@ export default function ConsoleTable() {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -34,7 +34,7 @@ export default function ConsoleTable() {
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component='th' scope='row'>
                 {row.name}
               </TableCell>
               <TableCell>{row.manufacturer}</TableCell>

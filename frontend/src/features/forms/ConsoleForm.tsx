@@ -22,10 +22,11 @@ export default function ConsoleForm() {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant='outlined' onClick={handleClickOpen}>
         Add New Console
       </Button>
       <Dialog
+      autoFocus
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -42,40 +43,34 @@ export default function ConsoleForm() {
       >
         <DialogTitle>New Console</DialogTitle>
         <DialogContent>
-          <DialogContentText marginBottom={"15px"}>
+          <DialogContentText marginBottom={'15px'}>
             Enter in console information:
           </DialogContentText>
-          <Stack sx={{ width: "100%" }} spacing={2}>
+          <Stack sx={{ width: '100%' }} spacing={2}>
             <TextField
-              autoFocus
               required
-              helperText="Manufacturer*"
-              id="console_manufacturer_field"
-              name="manufacturer"
-              type="text"
+              helperText='Name*'
+              id='console_name_field'
+              name='name'
+              type='text'
             />
             <TextField
-              autoFocus
-              required
-              helperText="Name*"
-              id="console_name_field"
-              name="name"
-              type="text"
+              helperText='Manufacturer'
+              id='console_manufacturer_field'
+              name='manufacturer'
+              type='text'
             />
             <TextField
-              autoFocus
-              required
-              helperText="Release Date*"
-              id="console_release_date_field"
-              name="release_date"
-              type="date"
+              helperText='Release Date'
+              id='console_release_date_field'
+              name='release_date'
+              type='date'
             />
             <TextField
-              autoFocus
-              helperText="Description"
-              id="console_description_field"
-              name="description"
-              type="text"
+              helperText='Description'
+              id='console_description_field'
+              name='description'
+              type='text'
               multiline
               rows={4}
             />
@@ -83,7 +78,7 @@ export default function ConsoleForm() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Submit</Button>
+          <Button type='submit'>Submit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

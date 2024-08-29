@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import Game from "../../models/Game";
-import getGameData from "../../api/GameApi";
+import { useEffect, useState } from 'react';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import Game from '../../models/Game';
+import getGameData from '../../api/GameApi';
 
 export default function GameTable() {
   const [gameData, setGameData] = useState<Game[]>([])
@@ -14,7 +14,7 @@ export default function GameTable() {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -31,7 +31,7 @@ export default function GameTable() {
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component='th' scope='row'>
                 {row.name}
               </TableCell>
               <TableCell>{row.publisher}</TableCell>
