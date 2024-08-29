@@ -12,7 +12,7 @@ def create_db_and_tables():
 app = FastAPI()
 origins = [
     "http://localhost:4000",
-    "http://0.0.0.0:4000",
+    "http://192.168.86.241:4000",
     ]
 app.add_middleware(
     CORSMiddleware,
