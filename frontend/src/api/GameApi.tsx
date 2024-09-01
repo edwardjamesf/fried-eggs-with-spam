@@ -9,7 +9,7 @@ export default async function getGameData(
   setGameData: (param: Game[]) => void
 ) {
   try {
-    const response = await fetch('http://192.168.86.241:8000/games', {
+    const response = await fetch('api/games', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -8,10 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, FormHelperText, InputLabel, Select, SelectChangeEvent, Stack } from '@mui/material';
+import { useState } from 'react';
 
 export default function GameForm() {
-  const [open, setOpen] = React.useState(false);
-  const [consoleName, setConsoleName] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [consoleName, setConsoleName] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -26,8 +26,8 @@ export default function GameForm() {
   }
 
   return (
-    <React.Fragment>
-      <Button variant='outlined' onClick={handleClickOpen} sx={{margin:'10px'}}>
+    <>
+      <Button variant='contained' onClick={handleClickOpen} sx={{margin:'10px'}}>
         Add New Game
       </Button>
       <Dialog
@@ -105,6 +105,6 @@ export default function GameForm() {
           <Button type='submit'>Submit</Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }

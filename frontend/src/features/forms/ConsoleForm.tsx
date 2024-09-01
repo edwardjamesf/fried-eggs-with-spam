@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,10 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/material';
+import { useState } from 'react';
 import { addConsoles } from '../../api/ConsoleApi';
 
 export default function ConsoleForm() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -21,8 +21,8 @@ export default function ConsoleForm() {
   };
 
   return (
-    <React.Fragment>
-      <Button variant='outlined' onClick={handleClickOpen}>
+    <>
+      <Button variant='contained' onClick={handleClickOpen}>
         Add New Console
       </Button>
       <Dialog
@@ -81,6 +81,6 @@ export default function ConsoleForm() {
           <Button type='submit'>Submit</Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }

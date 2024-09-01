@@ -9,7 +9,7 @@ export async function getConsoleData(
   setConsoleData: (param: Console[]) => void
 ) {
   try {
-    const response = await fetch('http://192.168.86.241:8000/consoles', {
+    const response = await fetch('api/consoles', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export async function addConsoles(
   consoles: {}
 ) {
   try {
-    const response = await fetch('http://192.168.86.241:8000/consoles', {
+    const response = await fetch('api/consoles', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

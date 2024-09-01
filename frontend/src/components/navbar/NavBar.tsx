@@ -27,7 +27,7 @@ export default function NavBar() {
   );
 
   return (
-    <Box>
+    <Box position={'sticky'}>
       <AppBar>
         <Toolbar>
           <IconButton onClick={() => setOpenMainMenu(true)}>
