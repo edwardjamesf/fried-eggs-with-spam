@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
 import { getConsoleData } from '../../api/ConsoleApi';
-import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import Console from '../../models/Console';
 import ConsoleForm from '../forms/ConsoleForm';
 
 export default function ConsoleTable() {
-  const [consoleData, setConsoleData] = useState<Console[]>([])
+  const [consoleData, setConsoleData] = useState<Console[]>([]);
 
   // useEffect(() => {
   //   const interval = setInterval(async () => {

@@ -6,7 +6,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { FormControl, FormHelperText, InputLabel, Select, SelectChangeEvent, Stack } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  Stack,
+} from '@mui/material';
 import { useState } from 'react';
 
 export default function GameForm() {
@@ -22,12 +29,16 @@ export default function GameForm() {
   };
 
   const handleConsoleSelect = (event: SelectChangeEvent) => {
-    setConsoleName(event.target.value)
-  }
+    setConsoleName(event.target.value);
+  };
 
   return (
     <>
-      <Button variant='contained' onClick={handleClickOpen} sx={{margin:'10px'}}>
+      <Button
+        variant='contained'
+        onClick={handleClickOpen}
+        sx={{ margin: '10px' }}
+      >
         Add New Game
       </Button>
       <Dialog
@@ -67,8 +78,9 @@ export default function GameForm() {
                 label='Console'
                 onChange={handleConsoleSelect}
               >
-                <MenuItem value=''><em>None</em></MenuItem>
-                
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
               </Select>
               <FormHelperText>Console</FormHelperText>
             </FormControl>

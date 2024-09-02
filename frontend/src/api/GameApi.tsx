@@ -1,7 +1,7 @@
 import Game from '../models/Game';
 
-export async function handleError(error: Error) : Promise<void> {
-  console.log(error)
+export async function handleError(error: Error): Promise<void> {
+  console.log(error);
   alert(error.message);
 }
 
@@ -13,7 +13,7 @@ export default async function getGameData(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     });
 
     if (!response.ok) {
@@ -23,9 +23,8 @@ export default async function getGameData(
     const data: Game[] = await response.json();
 
     setGameData([...data]);
-
   } catch (error) {
-    handleError(error as Error)
+    handleError(error as Error);
     return [];
   }
 }

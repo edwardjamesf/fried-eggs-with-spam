@@ -1,9 +1,9 @@
-import AddIcon from '@mui/icons-material/Add';
 import {
   Button,
   Card,
   CardActionArea,
   CardContent,
+  CardMedia,
   Dialog,
   DialogActions,
   DialogContent,
@@ -140,7 +140,11 @@ export default function ConsolesViewer() {
         <Grid item xs={4} key={consoleData.length + 2}>
           <Card sx={{ width: '200px', height: '280px' }}>
             <CardActionArea sx={{ height: '100%' }} onClick={handleOpenForm}>
-              <AddIcon fontSize='large' />
+              <CardMedia
+                component={'img'}
+                height={'200px'}
+                image='src/assets/images/add-to-database.png'
+              />
               <CardContent>
                 <Typography>Add a new console</Typography>
               </CardContent>

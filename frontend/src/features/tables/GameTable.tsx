@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import Game from '../../models/Game';
 import getGameData from '../../api/GameApi';
 import GameForm from '../forms/GameForm';
 
 export default function GameTable() {
-  const [gameData, setGameData] = useState<Game[]>([])
+  const [gameData, setGameData] = useState<Game[]>([]);
 
   useEffect(() => {
     (async () => {

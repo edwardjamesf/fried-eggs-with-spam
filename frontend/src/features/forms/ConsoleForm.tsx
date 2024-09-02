@@ -26,7 +26,7 @@ export default function ConsoleForm() {
         Add New Console
       </Button>
       <Dialog
-      autoFocus
+        autoFocus
         open={open}
         onClose={handleClose}
         PaperProps={{
