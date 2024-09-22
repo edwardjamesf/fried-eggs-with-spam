@@ -14,10 +14,12 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { Favorite, Home, Insights } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
 
 export default function NavBar() {
   const mainMenuOpts = ['Home', 'Wishlist', 'Metrics'];
   const mainMenuIcons = [<Home />, <Favorite />, <Insights />];
+  const mainMenuRoutes = ['/', '/aaa', '/']; // TODO: fix this. this is not working
 
   const [openMainMenu, setOpenMainMenu] = useState(false);
 
@@ -32,11 +34,11 @@ export default function NavBar() {
           <ListItem
             key={text}
             disablePadding
-            onClick={() => alert('UNDER CONSTRUCTION')}
           >
             <ListItemButton>
               <ListItemIcon>{mainMenuIcons[index]}</ListItemIcon>
               <ListItemText primary={text} />
+              <NavLink to={mainMenuRoutes[index]}></NavLink>
             </ListItemButton>
           </ListItem>
         ))}
