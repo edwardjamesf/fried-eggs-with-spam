@@ -17,9 +17,9 @@ Fried eggs with spam web application
   - TODO: if DB is on the same container, is there a need to protect Postgres and PGAdmin credentials?
 3. Run the following commands on the target environment:
 ```
-docker compose down
-docker rm -f
-docker pull
+docker container stop frontend backend
+docker compose rm
+docker compose pull
 docker compose up -d
 ```
 4. Ensure that all containers are healthy and running successfully
