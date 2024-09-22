@@ -4,8 +4,11 @@ Fried eggs with spam web application
 # Building the Backend Docker image
 1. Open Docker Desktop and login into Docker Hub
 2. In bash/cli, navigate to the `backend` folder
-3. Run the following command to build the image: `docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-fastapi:latest -t edwardjamesf/fews-fastapi:0.0.0 .`
-  - Change the image version tag to represent the appropriate version
+3. Run the following command to build the image: `docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-fastapi:latest -t edwardjamesf/fews-fastapi:<tag> .`
+  - Change the image version tag to represent the appropriate version (ex: 0.0.0)
+4. In bash/cli, navigate to the `frontend` folder
+5. Run the following command to build the image: `docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> .`
+  - Change the image version tag to represent the appropriate version (ex: 0.0.0)
 4. In Docker Desktop, go to Images tab and push the new images to Docker Hub
 
 # Deploying on the target environment
