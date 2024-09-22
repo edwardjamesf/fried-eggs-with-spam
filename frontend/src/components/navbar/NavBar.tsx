@@ -13,15 +13,17 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
-import { Favorite, Home, Insights } from '@mui/icons-material';
-import { NavLink } from 'react-router-dom';
+import { AttachMoney, Favorite, Home, Insights, Tv, VideogameAsset } from '@mui/icons-material';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
-  const mainMenuOpts = ['Home', 'Wishlist', 'Metrics'];
-  const mainMenuIcons = [<Home />, <Favorite />, <Insights />];
-  const mainMenuRoutes = ['/', '/aaa', '/']; // TODO: fix this. this is not working
+  const mainMenuOpts = ['Home', 'View Consoles', 'View Games', 'View Purchases', 'Wishlist', 'Metrics'];
+  const mainMenuIcons = [<Home />, <Tv />, <VideogameAsset />, <AttachMoney />, <Favorite />, <Insights />];
+  const mainMenuRoutes = ['/', 'consoles', '/aaa', '/purchases', '/aaa', '/aaa']; // TODO: fix this. this is not working
 
   const [openMainMenu, setOpenMainMenu] = useState(false);
+
+  const navigate = useNavigate();
 
   const MainMenu = (
     <Box
@@ -35,7 +37,7 @@ export default function NavBar() {
             key={text}
             disablePadding
           >
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate(mainMenuRoutes[index])}>
               <ListItemIcon>{mainMenuIcons[index]}</ListItemIcon>
               <ListItemText primary={text} />
               <NavLink to={mainMenuRoutes[index]}></NavLink>

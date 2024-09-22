@@ -4,6 +4,7 @@ import NavBar from './components/navbar/NavBar';
 import Home from './pages/Home';
 import { Suspense } from 'react';
 import ConsolesPage from './pages/ConsolesPage';
+import PurchasesPage from './pages/PurchasesPage';
 
 function App() {
   // TODO: Make page for no route found path
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/consoles' element={<ConsolesPage />} />
+          <Route path='/purchases' element={<PurchasesPage />} />
           <Route path='*' element={<div>You dun goofed</div>} />
         </Routes>
       </Suspense>

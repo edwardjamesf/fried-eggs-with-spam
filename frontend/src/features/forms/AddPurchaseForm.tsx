@@ -8,11 +8,11 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
+import { addPurchases } from '../../api/PurchaseApi';
 
 interface AddPurchaseForm {
   open: boolean;
   setOpen: (value: boolean) => void;
-  callback: (json: {}) => Promise<{ message: string } | undefined>;
 }
 
 export function AddPurchaseForm(props: AddPurchaseForm) {
@@ -32,7 +32,7 @@ export function AddPurchaseForm(props: AddPurchaseForm) {
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
           console.log(formJson);
-          props.callback(formJson);
+          addPurchases(formJson);
           handleClose();
         },
       }}

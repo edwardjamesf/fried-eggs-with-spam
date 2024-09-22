@@ -8,5 +8,4 @@ db_password = os.getenv("POSTGRES_PASSWORD")
 db_ip_port = os.getenv("POSTGRES_IP_PORT")
 db_name = os.getenv("POSTGRES_DB")
 postgres_url = f"postgresql://{db_user}:{db_password}@{db_ip_port}/{db_name}"
-print("postgres_url: " + postgres_url)
 engine = create_engine(postgres_url, echo=True)

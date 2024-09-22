@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, SQLModel, select
 from database import engine
-from models import Consoles, Games
+from models import Consoles, Games, Purchases
 
 
 def create_db_and_tables():
@@ -46,6 +46,13 @@ async def get_all_consoles():
 async def get_all_games():
     with Session(engine) as session:
         statement = select(Games)
+        results = session.exec(statement=statement)
+        return results.all()
+    
+@app.get("/purchases")
+async def get_all_purchases():
+    with Session(engine) as session:
+        statement = select(Purchases)
         results = session.exec(statement=statement)
         return results.all()
 

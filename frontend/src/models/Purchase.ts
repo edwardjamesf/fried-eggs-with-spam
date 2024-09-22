@@ -1,15 +1,15 @@
 export default interface Purchase {
-  id: string | null;
-  fkConsoleId: string | null;
-  fkGameId: string | null;
-  fkPlaceOfPurchase: string;
-  fkImageId: string | null;
-  description: string | null;
-  costBase: number;
-  costTax: number;
-  costShipping: number;
-  constOther: number;
-  costTotal: number | null;
+  id: string;
+  fk_console_id: string | null;
+  fk_game_id: string | null;
+  fk_place_of_purchase: string;
+  fk_image_id: string | null;
+  name: string | null;
+  cost_base: number;
+  cost_tax: number;
+  cost_shipping: number;
+  cost_other: number;
+  cost_total: number | null;
   date: string | null;
   notes: string | null;
 }
