@@ -5,9 +5,7 @@ export async function handleError(error: Error): Promise<void> {
   alert(error.message);
 }
 
-export async function getConsoleData(
-  setConsoleData: (param: Console[]) => void
-) {
+export async function getConsoleData() {
   try {
     const response = await fetch('api/consoles', {
       method: 'GET',
@@ -21,8 +19,7 @@ export async function getConsoleData(
     }
 
     const data: Console[] = await response.json();
-
-    setConsoleData([...data]);
+    return data;
   } catch (error) {
     handleError(error as Error);
     return [];
