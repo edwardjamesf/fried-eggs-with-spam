@@ -15,11 +15,17 @@ Fried eggs with spam web application
 1. If .env file does not exist, then make a copy of .env-sample and enter in your credentials for the DB
 2. If .env file does exist, then ensure that the Postgres and PGAdmin credentials are correct
   - TODO: if DB is on the same container, is there a need to protect Postgres and PGAdmin credentials?
-3. Run the following commands on the target environment:
+3. Connect to the target environment (ex: pi5) and navigate to project folder (ex: ~/git_repos/fried-eggs-with-spam)
+4. Run the following commands on the target environment:
+  - TODO: this doesn't work quite the way I expected, look into this
 ```
 docker container stop frontend backend
 docker compose rm
 docker compose pull
 docker compose up -d
 ```
-4. Ensure that all containers are healthy and running successfully
+  - `docker container stop <container-name>` will stop the specified containers
+  - `docker compose rm` will remove all stopped containers listed in the compose.yml file
+  - `docker compose pull` will retrieve the latest versions of the containers in the compose.yml file
+  - `docker compose up -d` will start up all containers not already started, `-d` will run in detached mode
+5. Ensure that all containers are healthy and running successfully
