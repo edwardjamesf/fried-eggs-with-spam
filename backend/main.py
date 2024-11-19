@@ -1,3 +1,4 @@
+import json
 from database import engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,18 +26,59 @@ app.add_middleware(
 SQLModel.metadata.create_all(engine)
 
 
+@app.post("/consoles")
+async def add_new_console(data: Consoles):
+    with Session(engine) as session:
+        new_console = Consoles(
+            name=data.name,
+            manufacturer=data.manufacturer,
+            release_date=data.release_date,
+            description=data.description,
+            image_id=data.image_id,
+        )
+        session.add(new_console)
+        session.commit()
+        return json.dumps(dict(new_console))
+
+
+@app.get("/consoles")
+async def get_console(console_id: str):
+    with Session(engine) as session:
+        statement = select(Consoles).where(Consoles.id == console_id)
+        results = session.exec(statement=statement).all()
+        return results
+
+
+@app.put("/consoles")
+async def update_console(data: Consoles, console_id: str):
+    with Session(engine) as session:
+        statement = select(Consoles).where(Consoles.id == console_id)
+        results = session.exec(statement=statement)
+        console = results.one()
+
+        if data.name is not None:
+            console.name = data.name
+        if data.manufacturer is not None:
+            console.manufacturer = data.manufacturer
+        if data.release_date is not None:
+            console.release_date = data.release_date
+        if data.description is not None:
+            console.description = data.description
+        if data.image_id is not None:
+            console.image_id = data.image_id
+        session.add(console)
+        session.commit()
+        session.refresh(console)
+        return console
+
+
+
 @app.get("/")
 async def read_root():
     return {"status": "get root success"}
 
 
-@app.post("/initialize_db_and_tables")
-def initialize_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-    return {"message": "DB and tables initialized."}
-
-
-@app.get("/consoles")
+@app.get("/consoles/all")
 async def get_all_consoles():
     with Session(engine) as session:
         statement = select(Consoles)
@@ -58,22 +100,6 @@ async def get_all_purchases():
         statement = select(Purchases)
         results = session.exec(statement=statement)
         return results.all()
-
-
-@app.post("/consoles")
-async def add_new_consoles(data: List[Consoles]):
-    with Session(engine) as session:
-        for console in data:
-            new_console = Consoles(
-                name=console.name,
-                manufacturer=console.manufacturer,
-                release_date=console.release_date,
-                description=console.description,
-                image_path=console.image_path,
-            )
-            session.add(new_console)
-            session.commit()
-            return {"status": "post consoles success"}
 
 
 @app.post("/games")
