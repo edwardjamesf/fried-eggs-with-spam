@@ -1,0 +1,17 @@
+FROM maven:3.9-eclipse-temurin-21-jammy AS build
+
+COPY pom.xml ./
+
+COPY src ./src
+
+# Build the project and create the executable JAR
+RUN mvn clean install
+
+FROM openjdk:21-jdk
+COPY --from=build target/*.jar /target/backend.jar
+
+# Expose port 8080
+EXPOSE 8080
+
+# Set the entrypoint command for running the application
+ENTRYPOINT ["java", "-jar", "/target/backend.jar"]
