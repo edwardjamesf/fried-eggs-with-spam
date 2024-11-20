@@ -1,10 +1,13 @@
 package org.fews.backend.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.fews.backend.model.Console;
+import org.fews.backend.model.ConsoleDto;
 import org.fews.backend.repository.ConsoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -15,16 +18,20 @@ public class ConsoleService {
         this.consoleRepository = consoleRepository;
     }
 
-    public Console createConsole(Console console) throws SQLException {
-        return consoleRepository.createConsole(console).getFirst();
+    public Console createConsole(ConsoleDto consoleDto) throws SQLException {
+        return consoleRepository.createConsole(consoleDto).getFirst();
     }
 
     public Console getConsole(UUID consoleId) throws SQLException {
-        return consoleRepository.getConsole(consoleId).getFirst();
+        List<Console> returnList = consoleRepository.getConsole(consoleId);
+        if (returnList.isEmpty()) {
+            throw new EntityNotFoundException("Console ID " + consoleId + " not found");
+        }
+        return returnList.getFirst();
     }
 
-    public Console updateConsole(UUID consoleId, Console console) throws SQLException {
-        return consoleRepository.updateConsole(consoleId, console).getFirst();
+    public Console updateConsole(UUID consoleId, ConsoleDto consoleDto) throws SQLException {
+        return consoleRepository.updateConsole(consoleId, consoleDto).getFirst();
     }
 
     public Console deleteConsole(UUID consoleId) throws SQLException {

@@ -1,6 +1,7 @@
 package org.fews.backend.repository;
 
 import org.fews.backend.model.Console;
+import org.fews.backend.model.ConsoleDto;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -25,13 +26,14 @@ public class ConsoleRepository {
         public List<Console> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
             List<Console> consoles = new ArrayList<>();
             while (resultSet.next()) {
-                Console console = new Console();
-                console.setId((UUID) resultSet.getObject("id"));
-                console.setName(resultSet.getString("name"));
-                console.setManufacturer(resultSet.getString("manufacturer"));
-                console.setReleaseDate(resultSet.getString("release_date"));
-                console.setDescription(resultSet.getString("description"));
-                console.setImageId(resultSet.getString("image_id"));
+                Console console = Console.builder()
+                        .id((UUID) resultSet.getObject("id"))
+                        .name(resultSet.getString("name"))
+                        .manufacturer(resultSet.getString("manufacturer"))
+                        .releaseDate(resultSet.getString("release_date"))
+                        .description(resultSet.getString("description"))
+                        .imageId((UUID) resultSet.getObject("image_id"))
+                        .build();
 
                 consoles.add(console);
             }
@@ -39,17 +41,17 @@ public class ConsoleRepository {
         }
     }
 
-    public List<Console> createConsole(Console console) throws SQLException {
+    public List<Console> createConsole(ConsoleDto consoleDto) throws SQLException {
         try {
             String sql = "select * from insert_console(?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new ConsoleExtractor(),
-                    console.getName(),
-                    console.getManufacturer(),
-                    console.getReleaseDate(),
-                    console.getDescription(),
-                    console.getImageId()
+                    consoleDto.getName(),
+                    consoleDto.getManufacturer(),
+                    consoleDto.getReleaseDate(),
+                    consoleDto.getDescription(),
+                    consoleDto.getImageId()
             );
         } catch (DataAccessException e) {
             throw new SQLException("Internal Database Error: Create console query failed to execute: " + e.getMessage());
@@ -73,18 +75,18 @@ public class ConsoleRepository {
         }
     }
 
-    public List<Console> updateConsole(UUID consoleId, Console console) throws SQLException {
+    public List<Console> updateConsole(UUID consoleId, ConsoleDto consoleDto) throws SQLException {
         try {
             String sql = "select * from update_console(?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new ConsoleExtractor(),
                     consoleId,
-                    console.getName(),
-                    console.getManufacturer(),
-                    console.getReleaseDate(),
-                    console.getDescription(),
-                    console.getImageId()
+                    consoleDto.getName(),
+                    consoleDto.getManufacturer(),
+                    consoleDto.getReleaseDate(),
+                    consoleDto.getDescription(),
+                    consoleDto.getImageId()
             );
         } catch (DataAccessException e) {
             throw new SQLException("Internal Database Error: Update console query failed to execute: " + e.getMessage());

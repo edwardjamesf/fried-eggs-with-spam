@@ -7,11 +7,13 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class Console {
+public class Game {
     private UUID id;
     private String name;
-    private String manufacturer;
+    private String developer;
+    private String publisher;
     private String releaseDate;
     private String description;
     private UUID imageId;
+    private UUID consoleId;
 }
