@@ -16,6 +16,6 @@ public class ImageDto {
     private String name;
     @Schema(description = "Alt-text for the image", example = "Nintendo NES console with controllers")
     private String description;
-    @Schema(description = "Path to file, if it is stored in a non-standard location", example = "")
+    @Schema(description = "Path to file, if it is stored in a non-standard location", example = "C:")
     private String path;
 }
