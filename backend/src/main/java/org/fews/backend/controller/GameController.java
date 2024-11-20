@@ -32,7 +32,7 @@ public class GameController {
     @PostMapping(produces = "application/json")
     @Operation(summary = "Create game data", description = "Creates new game data")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game Data Successfully Created", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve game record: [message]\"\n}")))
     })
@@ -43,8 +43,8 @@ public class GameController {
     @GetMapping(value = "/{gameId}", produces = "application/json")
     @Operation(summary = "Retrieve game data", description = "Retrieves game data by its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game Data Successfully Retrieved", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
-            @ApiResponse(responseCode = "404", description = "Game Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
+            @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve game record: [message]\"\n}")))
     })
     public ResponseEntity<Game> getGame(@PathVariable UUID gameId) throws SQLException {
@@ -54,9 +54,9 @@ public class GameController {
     @PutMapping(value = "/{gameId}", produces = "application/json")
     @Operation(summary = "Update game data", description = "Updates existing game data given its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game Data Successfully Updated", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
-            @ApiResponse(responseCode = "404", description = "Game Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
+            @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not update game record: [message]\"\n}")))})
     public ResponseEntity<Game> updateGame(@PathVariable UUID gameId, @Valid() @RequestBody GameDto gameDto, BindingResult bindingResult) throws SQLException {
         return ResponseEntity.ok(gameService.updateGame(gameId, gameDto));
@@ -65,8 +65,8 @@ public class GameController {
     @DeleteMapping(value = "/{gameId}", produces = "application/json")
     @Operation(summary = "Delete game data", description = "Deletes an existing game data entry by its database ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Game Data Successfully Deleted", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
-            @ApiResponse(responseCode = "404", description = "Game Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class)))),
+            @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Game ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not delete game record: [message]\"\n}")))})
     public ResponseEntity<Game> deleteGame(@PathVariable UUID gameId) throws SQLException{
         return ResponseEntity.ok(gameService.deleteGame(gameId));
