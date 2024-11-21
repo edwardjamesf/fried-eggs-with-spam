@@ -248,6 +248,28 @@ end;
 $$ language plpgsql;
 
 -- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_image_all
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_image_all() returns setof images as $$
+begin
+    return query
+    select * from images order by name desc;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_image_limit
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_image_limit(
+    limit_in integer
+) returns setof images as $$
+begin
+    return query
+    select * from images order by name desc limit limit_in;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
 -- create function: fetch_console
 -- ----------------------------------------------------------------------------------------------------
 create or replace function fetch_console(
@@ -256,6 +278,28 @@ create or replace function fetch_console(
 begin
     return query
     select * from consoles where id = id_in;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_console_all
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_console_all() returns setof consoles as $$
+begin
+    return query
+    select * from consoles order by release_date desc;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_console_limit
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_console_limit(
+    limit_in integer
+) returns setof consoles as $$
+begin
+    return query
+    select * from consoles order by release_date desc limit limit_in;
 end;
 $$ language plpgsql;
 
@@ -272,6 +316,28 @@ end;
 $$ language plpgsql;
 
 -- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_game_all
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_game_all() returns setof games as $$
+begin
+    return query
+    select * from games order by release_date desc;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_game_limit
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_game_limit(
+    limit_in integer
+) returns setof games as $$
+begin
+    return query
+    select * from games order by release_date desc limit limit_in;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
 -- create function: fetch_purchase
 -- ----------------------------------------------------------------------------------------------------
 create or replace function fetch_purchase(
@@ -280,6 +346,28 @@ create or replace function fetch_purchase(
 begin
     return query
     select * from purchases where id = id_in;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_purchase_all
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_purchase_all() returns setof purchases as $$
+begin
+    return query
+    select * from purchases order by purchase_date desc;
+end;
+$$ language plpgsql;
+
+-- ----------------------------------------------------------------------------------------------------
+-- create function: fetch_purchase_limit
+-- ----------------------------------------------------------------------------------------------------
+create or replace function fetch_purchase_limit(
+    limit_in integer
+) returns setof purchases as $$
+begin
+    return query
+    select * from purchases order by purchase_date desc limit limit_in;
 end;
 $$ language plpgsql;
 
