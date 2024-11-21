@@ -71,6 +71,35 @@ public class ImageRepository {
         }
     }
 
+    public List<Image> getImagesAll() throws SQLException {
+        try {
+            String sql = "select * from fetch_image_all()";
+            return template.query(
+                    sql,
+                    new ImageExtractor()
+            );
+        } catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch all images query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch all image records: " + e.getMessage());
+        }
+    }
+
+    public List<Image> getImagesLimit(int limit) throws SQLException {
+        try {
+            String sql = "select * from fetch_image_limit(?)";
+            return template.query(
+                    sql,
+                    new ImageExtractor(),
+                    limit
+            );
+        }catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch images query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch image records: " + e.getMessage());
+        }
+    }
+
     public List<Image> updateImage(UUID imageId, ImageDto imageDto) throws SQLException {
         try {
             String sql = "select * from update_image(?, ?, ?, ?)";

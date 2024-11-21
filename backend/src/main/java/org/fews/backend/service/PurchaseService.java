@@ -30,6 +30,22 @@ public class PurchaseService {
         return returnList.getFirst();
     }
 
+    public List<Purchase> getPurchasesAll() throws SQLException {
+        List<Purchase> returnList = purchaseRepository.getPurchasesAll();
+        if (returnList.isEmpty()) {
+            throw new EntityNotFoundException("No purchases found in database");
+        }
+        return returnList;
+    }
+
+    public List<Purchase> getPurchasesLimit(int limit) throws SQLException {
+        List<Purchase> returnList = purchaseRepository.getPurchasesLimit(limit);
+        if (returnList.isEmpty()) {
+            throw new EntityNotFoundException("No purchases found in database");
+        }
+        return returnList;
+    }
+
     public Purchase updatePurchase(UUID purchaseId, PurchaseDto purchaseDto) throws SQLException {
         return purchaseRepository.updatePurchase(purchaseId, purchaseDto).getFirst();
     }

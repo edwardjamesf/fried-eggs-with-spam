@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,7 +33,7 @@ public class PurchaseController {
     @PostMapping(produces = "application/json")
     @Operation(summary = "Add purchase", description = "Adds new purchase to database")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Purchase.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Purchase.class))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve purchase record: [message]\"\n}")))
     })
@@ -43,7 +44,7 @@ public class PurchaseController {
     @GetMapping(value = "/{purchaseId}", produces = "application/json")
     @Operation(summary = "Retrieve purchase data", description = "Retrieves purchase data by its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Purchase.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Purchase.class))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Purchase ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve purchase record: [message]\"\n}")))
     })
@@ -51,10 +52,25 @@ public class PurchaseController {
         return ResponseEntity.ok(purchaseService.getPurchase(purchaseId));
     }
 
+    @GetMapping(value = "/all", produces = "application/json")
+    @Operation(summary = "Retrieve multiple purchase data", description = "Retrieves multiple purchase data in the database. Results can be limited via query parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Purchase.class)))),
+            @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"No purchases found in database\"\n}"))),
+            @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve purchase records: [message]\"\n}")))
+    })
+    public ResponseEntity<List<Purchase>> getPurchasesAll(@RequestParam(required = false) Integer limit) throws SQLException {
+        if (limit == null) {
+            return ResponseEntity.ok(purchaseService.getPurchasesAll());
+        } else {
+            return ResponseEntity.ok(purchaseService.getPurchasesLimit(limit));
+        }
+    }
+
     @PutMapping(value = "/{purchaseId}", produces = "application/json")
     @Operation(summary = "Update purchase data", description = "Updates existing purchase data given its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Purchase.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Purchase.class))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Purchase ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not update purchase record: [message]\"\n}")))})
@@ -65,7 +81,7 @@ public class PurchaseController {
     @DeleteMapping(value = "/{purchaseId}", produces = "application/json")
     @Operation(summary = "Delete purchase data", description = "Deletes an existing purchase data entry by its database ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Purchase.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Purchase.class))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Purchase ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not delete purchase record: [message]\"\n}")))})
     public ResponseEntity<Purchase> deletePurchase(@PathVariable UUID purchaseId) throws SQLException{

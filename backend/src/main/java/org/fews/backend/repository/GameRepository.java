@@ -79,6 +79,35 @@ public class GameRepository {
         }
     }
 
+    public List<Game> getGamesAll() throws SQLException {
+        try {
+            String sql = "select * from fetch_game_all()";
+            return template.query(
+                    sql,
+                    new GameExtractor()
+            );
+        } catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch all games query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch all game records: " + e.getMessage());
+        }
+    }
+
+    public List<Game> getGamesLimit(int limit) throws SQLException {
+        try {
+            String sql = "select * from fetch_game_limit(?)";
+            return template.query(
+                    sql,
+                    new GameExtractor(),
+                    limit
+            );
+        }catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch games query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch game records: " + e.getMessage());
+        }
+    }
+
     public List<Game> updateGame(UUID gameId, GameDto gameDto) throws SQLException {
         try {
             String sql = "select * from update_game(?, ?, ?, ?, ?, ?, ?, ?)";

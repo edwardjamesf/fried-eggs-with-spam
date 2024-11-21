@@ -86,6 +86,35 @@ public class PurchaseRepository {
         }
     }
 
+    public List<Purchase> getPurchasesAll() throws SQLException {
+        try {
+            String sql = "select * from fetch_purchase_all()";
+            return template.query(
+                    sql,
+                    new PurchaseExtractor()
+            );
+        } catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch all purchases query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch all purchase records: " + e.getMessage());
+        }
+    }
+
+    public List<Purchase> getPurchasesLimit(int limit) throws SQLException {
+        try {
+            String sql = "select * from fetch_purchase_limit(?)";
+            return template.query(
+                    sql,
+                    new PurchaseExtractor(),
+                    limit
+            );
+        }catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch purchases query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch purchase records: " + e.getMessage());
+        }
+    }
+
     public List<Purchase> updatePurchase(UUID purchaseId, PurchaseDto purchaseDto) throws SQLException {
         try {
             String sql = "select * from update_purchase(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

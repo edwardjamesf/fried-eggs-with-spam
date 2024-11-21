@@ -75,6 +75,35 @@ public class ConsoleRepository {
         }
     }
 
+    public List<Console> getConsolesAll() throws SQLException {
+        try {
+            String sql = "select * from fetch_console_all()";
+            return template.query(
+                    sql,
+                    new ConsoleExtractor()
+            );
+        } catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch all consoles query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch all console records: " + e.getMessage());
+        }
+    }
+
+    public List<Console> getConsolesLimit(int limit) throws SQLException {
+        try {
+            String sql = "select * from fetch_console_limit(?)";
+            return template.query(
+                    sql,
+                    new ConsoleExtractor(),
+                    limit
+            );
+        }catch (DataAccessException e) {
+            throw new SQLException("Internal Database Error: Fetch consoles query failed to execute: " + e.getMessage());
+        } catch (Exception e) {
+            throw new SQLException("Internal Database Error: Could not fetch console records: " + e.getMessage());
+        }
+    }
+
     public List<Console> updateConsole(UUID consoleId, ConsoleDto consoleDto) throws SQLException {
         try {
             String sql = "select * from update_console(?, ?, ?, ?, ?, ?)";

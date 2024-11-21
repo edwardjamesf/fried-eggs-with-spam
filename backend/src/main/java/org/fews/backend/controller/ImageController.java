@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,7 +33,7 @@ public class ImageController {
     @PostMapping(produces = "application/json")
     @Operation(summary = "Add image", description = "Adds new image to database")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Image.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Image.class))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve image record: [message]\"\n}")))
     })
@@ -43,7 +44,7 @@ public class ImageController {
     @GetMapping(value = "/{imageId}", produces = "application/json")
     @Operation(summary = "Retrieve image data", description = "Retrieves image data by its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Image.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Image.class))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Image ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve image record: [message]\"\n}")))
     })
@@ -51,10 +52,25 @@ public class ImageController {
         return ResponseEntity.ok(imageService.getImage(imageId));
     }
 
+    @GetMapping(value = "/all", produces = "application/json")
+    @Operation(summary = "Retrieve multiple image data", description = "Retrieves multiple image data in the database. Results can be limited via query parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Image.class)))),
+            @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"No images found in database\"\n}"))),
+            @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve image records: [message]\"\n}")))
+    })
+    public ResponseEntity<List<Image>> getImagesAll(@RequestParam(required = false) Integer limit) throws SQLException {
+        if (limit == null) {
+            return ResponseEntity.ok(imageService.getImagesAll());
+        } else {
+            return ResponseEntity.ok(imageService.getImagesLimit(limit));
+        }
+    }
+
     @PutMapping(value = "/{imageId}", produces = "application/json")
     @Operation(summary = "Update image data", description = "Updates existing image data given its database ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Image.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Image.class))),
             @ApiResponse(responseCode = "400", description = "User Error Occurred", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Missing required body parameters: [???]\"\n}"))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Image ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not update image record: [message]\"\n}")))})
@@ -65,7 +81,7 @@ public class ImageController {
     @DeleteMapping(value = "/{imageId}", produces = "application/json")
     @Operation(summary = "Delete image data", description = "Deletes an existing image data entry by its database ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Image.class)))),
+            @ApiResponse(responseCode = "200", description = "Successful Operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Image.class))),
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Image ID [UUID] not found\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not delete image record: [message]\"\n}")))})
     public ResponseEntity<Image> deleteImage(@PathVariable UUID imageId) throws SQLException{

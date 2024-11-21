@@ -30,6 +30,22 @@ public class ImageService {
         return returnList.getFirst();
     }
 
+    public List<Image> getImagesAll() throws SQLException {
+        List<Image> returnList = imageRepository.getImagesAll();
+        if (returnList.isEmpty()) {
+            throw new EntityNotFoundException("No images found in database");
+        }
+        return returnList;
+    }
+
+    public List<Image> getImagesLimit(int limit) throws SQLException {
+        List<Image> returnList = imageRepository.getImagesLimit(limit);
+        if (returnList.isEmpty()) {
+            throw new EntityNotFoundException("No images found in database");
+        }
+        return returnList;
+    }
+
     public Image updateImage(UUID imageId, ImageDto imageDto) throws SQLException {
         return imageRepository.updateImage(imageId, imageDto).getFirst();
     }
