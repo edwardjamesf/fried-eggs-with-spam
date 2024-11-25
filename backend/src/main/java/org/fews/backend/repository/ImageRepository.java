@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,8 @@ public class ImageRepository {
                         .name(resultSet.getString("name"))
                         .description(resultSet.getString("description"))
                         .path(resultSet.getString("path"))
+                        .createdTimestamp(((Timestamp) resultSet.getObject("created_timestamp")).toInstant())
+                        .modifiedTimestamp(((Timestamp) resultSet.getObject("modified_timestamp")).toInstant())
                         .build();
 
                 images.add(image);
@@ -120,7 +123,7 @@ public class ImageRepository {
 
     public List<Image> deleteImage(UUID imageId) throws SQLException {
         try {
-            String sql = "select * from delete_image(?,)";
+            String sql = "select * from delete_image(?)";
             return template.query(
                     sql,
                     new ImageExtractor(),

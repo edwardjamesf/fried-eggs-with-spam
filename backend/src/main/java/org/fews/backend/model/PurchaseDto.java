@@ -27,6 +27,8 @@ public class PurchaseDto {
     private BigDecimal costShipping;
     @Schema(description = "Other fees paid pertaining to the purchase", example = "0.0")
     private BigDecimal costOther;
+    @Schema(description = "Where the purchase was made from", example = "Ebay")
+    private String purchaseFrom;
     @Schema(description = "Notes about the purchase", example = "Grey Japanese model 1. Includes power and composite A/V cables, 1 controller, and Vampire Hunter (JP) game")
     private String notes;
     @Schema(description = "ID of the associated image, if applicable", example = "00000000-0000-0000-0000-000000000000")

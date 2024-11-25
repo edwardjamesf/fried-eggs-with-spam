@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,10 +36,13 @@ public class PurchaseRepository {
                         .costShipping(resultSet.getDouble("cost_shipping"))
                         .costOther(resultSet.getDouble("cost_other"))
                         .costTotal(resultSet.getDouble("cost_total"))
+                        .purchaseFrom(resultSet.getString("purchase_from"))
                         .notes(resultSet.getString("notes"))
                         .imageId((UUID) resultSet.getObject("image_id"))
                         .consoleId((UUID) resultSet.getObject("console_id"))
                         .gameId((UUID) resultSet.getObject("game_id"))
+                        .createdTimestamp(((Timestamp) resultSet.getObject("created_timestamp")).toInstant())
+                        .modifiedTimestamp(((Timestamp) resultSet.getObject("modified_timestamp")).toInstant())
                         .build();
 
                 purchases.add(purchase);
@@ -49,7 +53,7 @@ public class PurchaseRepository {
 
     public List<Purchase> createPurchase(PurchaseDto purchaseDto) throws SQLException {
         try {
-            String sql = "select * from insert_purchase(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "select * from insert_purchase(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new PurchaseExtractor(),
@@ -59,6 +63,7 @@ public class PurchaseRepository {
                     purchaseDto.getCostTax(),
                     purchaseDto.getCostShipping(),
                     purchaseDto.getCostOther(),
+                    purchaseDto.getPurchaseFrom(),
                     purchaseDto.getNotes(),
                     purchaseDto.getImageId(),
                     purchaseDto.getConsoleId(),
@@ -117,7 +122,7 @@ public class PurchaseRepository {
 
     public List<Purchase> updatePurchase(UUID purchaseId, PurchaseDto purchaseDto) throws SQLException {
         try {
-            String sql = "select * from update_purchase(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "select * from update_purchase(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new PurchaseExtractor(),
@@ -128,6 +133,7 @@ public class PurchaseRepository {
                     purchaseDto.getCostTax(),
                     purchaseDto.getCostShipping(),
                     purchaseDto.getCostOther(),
+                    purchaseDto.getPurchaseFrom(),
                     purchaseDto.getNotes(),
                     purchaseDto.getImageId(),
                     purchaseDto.getConsoleId(),

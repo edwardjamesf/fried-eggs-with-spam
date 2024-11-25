@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,8 @@ public class ConsoleRepository {
                         .releaseDate(resultSet.getString("release_date"))
                         .description(resultSet.getString("description"))
                         .imageId((UUID) resultSet.getObject("image_id"))
+                        .createdTimestamp(((Timestamp) resultSet.getObject("created_timestamp")).toInstant())
+                        .modifiedTimestamp(((Timestamp) resultSet.getObject("modified_timestamp")).toInstant())
                         .build();
 
                 consoles.add(console);

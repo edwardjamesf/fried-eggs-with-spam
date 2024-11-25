@@ -3,6 +3,7 @@ package org.fews.backend.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -14,4 +15,6 @@ public class Console {
     private String releaseDate;
     private String description;
     private UUID imageId;
+    private Instant createdTimestamp;
+    private Instant modifiedTimestamp;
 }
