@@ -26,6 +26,8 @@ create table images(
     name text not null,
     description text,
     path text,
+    created_timestamp timestamp default transaction_timestamp(),
+    modified_timestamp timestamp default transaction_timestamp(),
     constraint pk_images primary key (id)
 );
 
@@ -39,6 +41,8 @@ create table consoles(
     release_date text,
     description text,
     image_id uuid,
+    created_timestamp timestamp default transaction_timestamp(),
+    modified_timestamp timestamp default transaction_timestamp(),
     constraint pk_consoles primary key (id),
     constraint fk_consoles_images foreign key (image_id)
         references images (id)
@@ -58,6 +62,8 @@ create table games(
     description text,
     image_id uuid,
     console_id uuid,
+    created_timestamp timestamp default transaction_timestamp(),
+    modified_timestamp timestamp default transaction_timestamp(),
     constraint pk_games primary key (id),
     constraint fk_games_images foreign key (image_id)
         references images (id)
@@ -81,10 +87,13 @@ create table purchases(
     cost_shipping numeric,
     cost_other numeric,
     cost_total numeric generated always as (cost_base + cost_tax + cost_shipping + cost_other) stored,
+    purchase_from text,
     notes text,
     image_id uuid,
     console_id uuid,
     game_id uuid,
+    created_timestamp timestamp default transaction_timestamp(),
+    modified_timestamp timestamp default transaction_timestamp(),
     constraint pk_purchases primary key (id),
     constraint fk_purchases_images foreign key (image_id)
         references images (id)
@@ -200,6 +209,7 @@ create or replace function insert_purchase(
     cost_tax_in numeric,
     cost_shipping_in numeric,
     cost_other_in numeric,
+    purchase_from_in text,
     notes_in text,
     image_id_in uuid,
     console_id_in uuid,
@@ -215,6 +225,7 @@ begin
             cost_tax,
             cost_shipping,
             cost_other,
+            purchase_from,
             notes,
             image_id,
             console_id,
@@ -226,6 +237,7 @@ begin
             cost_tax_in,
             cost_shipping_in,
             cost_other_in,
+            purchase_from_in,
             notes_in,
             image_id_in,
             console_id_in,
@@ -253,7 +265,7 @@ $$ language plpgsql;
 create or replace function fetch_image_all() returns setof images as $$
 begin
     return query
-    select * from images order by name desc;
+    select * from images order by modified_timestamp desc;
 end;
 $$ language plpgsql;
 
@@ -265,7 +277,7 @@ create or replace function fetch_image_limit(
 ) returns setof images as $$
 begin
     return query
-    select * from images order by name desc limit limit_in;
+    select * from images order by modified_timestamp desc limit limit_in;
 end;
 $$ language plpgsql;
 
@@ -287,7 +299,7 @@ $$ language plpgsql;
 create or replace function fetch_console_all() returns setof consoles as $$
 begin
     return query
-    select * from consoles order by release_date desc;
+    select * from consoles order by modified_timestamp desc;
 end;
 $$ language plpgsql;
 
@@ -299,7 +311,7 @@ create or replace function fetch_console_limit(
 ) returns setof consoles as $$
 begin
     return query
-    select * from consoles order by release_date desc limit limit_in;
+    select * from consoles order by modified_timestamp desc limit limit_in;
 end;
 $$ language plpgsql;
 
@@ -321,7 +333,7 @@ $$ language plpgsql;
 create or replace function fetch_game_all() returns setof games as $$
 begin
     return query
-    select * from games order by release_date desc;
+    select * from games order by modified_timestamp desc;
 end;
 $$ language plpgsql;
 
@@ -333,7 +345,7 @@ create or replace function fetch_game_limit(
 ) returns setof games as $$
 begin
     return query
-    select * from games order by release_date desc limit limit_in;
+    select * from games order by modified_timestamp desc limit limit_in;
 end;
 $$ language plpgsql;
 
@@ -355,7 +367,7 @@ $$ language plpgsql;
 create or replace function fetch_purchase_all() returns setof purchases as $$
 begin
     return query
-    select * from purchases order by purchase_date desc;
+    select * from purchases order by modified_timestamp desc;
 end;
 $$ language plpgsql;
 
@@ -367,7 +379,7 @@ create or replace function fetch_purchase_limit(
 ) returns setof purchases as $$
 begin
     return query
-    select * from purchases order by purchase_date desc limit limit_in;
+    select * from purchases order by modified_timestamp desc limit limit_in;
 end;
 $$ language plpgsql;
 
@@ -386,7 +398,8 @@ begin
         update images set
             name = name_in,
             description = description_in,
-            path = path_in
+            path = path_in,
+            modified_timestamp = transaction_timestamp()
             where id = id_in
             returning *
     ) select * from updated;
@@ -412,7 +425,8 @@ begin
             manufacturer = manufacturer_in,
             release_date = release_date_in,
             description = description_in,
-            image_id = image_id_in
+            image_id = image_id_in,
+            modified_timestamp = transaction_timestamp()
             where id = id_in
             returning *
     ) select * from updated;
@@ -442,7 +456,8 @@ begin
             release_date = release_date_in,
             description = description_in,
             image_id = image_id_in,
-            console_id = console_id_in
+            console_id = console_id_in,
+            modified_timestamp = transaction_timestamp()
             where id = id_in
             returning *
     ) select * from updated;
@@ -460,6 +475,7 @@ create or replace function update_purchase(
     cost_tax_in numeric,
     cost_shipping_in numeric,
     cost_other_in numeric,
+    purchase_from_in text,
     notes_in text,
     image_id_in uuid,
     console_id_in uuid,
@@ -475,10 +491,12 @@ begin
             cost_tax = cost_tax_in,
             cost_shipping = cost_shipping_in,
             cost_other = cost_other_in,
+            purchase_from = purchase_from_in,
             notes = notes_in,
             image_id = image_id_in,
             console_id = console_id_in,
-            game_id = game_id_in
+            game_id = game_id_in,
+            modified_timestamp = transaction_timestamp()
             where id = id_in
             returning *
     ) select * from updated;
@@ -556,7 +574,7 @@ begin
     select id into image_key from insert_image('test', null, null);
     select id into console_key from insert_console('test', null, null, null, null);
     select id into game_key from insert_game('test', null, null, null, null, null, null);
-    select id into purchase_key from insert_purchase('test', null, 0.0, 1.0, 2.0, 3.0, null, null, null, null);
+    select id into purchase_key from insert_purchase('test', null, 0.0, 1.0, 2.0, 3.0, null, null, null, null, null);
 
     perform fetch_image(image_key);
     perform fetch_console(console_key);
@@ -566,7 +584,7 @@ begin
     perform update_image(image_key, 'test', 'description', 'path');
     perform update_console(console_key, 'test', 'manufacturer', 'release_date', 'description', null);
     perform update_game(game_key, 'test', 'developer', 'publisher', 'release_date', 'description', image_key, console_key);
-    perform update_purchase(purchase_key, 'test', 'purchase_date', 10.11, 20.22, 30.33, 40.44, 'notes', image_key, console_key, game_key);
+    perform update_purchase(purchase_key, 'test', 'purchase_date', 10.11, 20.22, 30.33, 40.44, 'purchase_from', 'notes', image_key, console_key, game_key);
 
     perform delete_image(image_key);
     perform delete_console(console_key);
@@ -576,3 +594,5 @@ begin
     return 1;
 end;
 $$ language plpgsql;
+
+select run_integration_test();
