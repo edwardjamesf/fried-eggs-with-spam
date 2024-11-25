@@ -1,4 +1,4 @@
-import {Dispatch, FormEvent, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import VgConsole from "../models/VgConsole.ts";
 
 /**
@@ -22,7 +22,7 @@ export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDrop
       })
   }, [])
 
-  const handleChange = (event: { target: { value: SetStateAction<VgConsole>; }; }) => {
+  const handleChange = (event: { target: { value: { toString: () => any; }; }; }) => {
     fetch(`api/consoles/${event.target.value.toString()}`, {
       method: "GET",
       headers: {

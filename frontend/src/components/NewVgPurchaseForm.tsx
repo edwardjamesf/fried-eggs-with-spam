@@ -1,25 +1,25 @@
-import {ReactElement, useState} from "react";
+import {Dispatch, FormEvent, ReactElement, SetStateAction, useState} from "react";
 import VgConsole from "../models/VgConsole.ts";
 import VgGame from "../models/VgGame.ts";
 import NewVgConsoleForm from "./NewVgConsoleForm.tsx";
 import SelectConsoleDropdown from "./SelectConsoleDropdown.tsx";
+import SelectGameDropdown from "./SelectGameDropdown.tsx";
+import NewVgGameForm from "./NewVgGameForm.tsx";
+
+interface VgConsoleTableProps {
+  vgConsole: VgConsole;
+  setVgConsole: Dispatch<SetStateAction<VgConsole>>;
+}
 
 /**
  * Section of the overall Add New Purchase Form to link the purchase with a console.
  *
  * @constructor
  */
-function VgConsoleTable(): ReactElement {
+function VgConsoleTable(props: Readonly<VgConsoleTableProps>): ReactElement {
+  const {vgConsole, setVgConsole} = props;
+
   const [openNewVgConsoleDialog, setOpenNewVgConsoleDialog] = useState<boolean>(false);
-  const [openSearchVgConsoleDialog, setOpenSearchVgConsoleDialog] = useState<boolean>(false);
-  const [vgConsole, setVgConsole] = useState<VgConsole>({
-    id: "",
-    name: "",
-    manufacturer: null,
-    releaseDate: null,
-    description: null,
-    imageId: null
-  });
 
   // Overwrite any empty strings or null values with a different placeholder, for better user experiences
   let name = vgConsole["name"]
@@ -44,8 +44,12 @@ function VgConsoleTable(): ReactElement {
     <>
       <p>Select console:</p>
       {/*Add a new console to the database*/}
-      <button onClick={() => {setOpenNewVgConsoleDialog(true)}}>Add Console</button>
-      <NewVgConsoleForm openDialog={openNewVgConsoleDialog} setOpenDialog={setOpenNewVgConsoleDialog} setVgConsole={setVgConsole}/>
+      <button onClick={() => {
+        setOpenNewVgConsoleDialog(true)
+      }}>Add Console
+      </button>
+      <NewVgConsoleForm openDialog={openNewVgConsoleDialog} setOpenDialog={setOpenNewVgConsoleDialog}
+                        setVgConsole={setVgConsole}/>
 
       {/*Search database for an existing console*/}
       <SelectConsoleDropdown setVgConsole={setVgConsole}/>
@@ -75,24 +79,19 @@ function VgConsoleTable(): ReactElement {
   );
 }
 
+interface VgGameTableProps {
+  vgGame: VgGame;
+  setVgGame: Dispatch<SetStateAction<VgGame>>;
+}
 /**
  * Section of the overall Add New Purchase Form to link the purchase with a game.
  *
  * @constructor
  */
-function VgGameTable(): ReactElement {
+function VgGameTable(props: Readonly<VgGameTableProps>): ReactElement {
+  const {vgGame, setVgGame} = props;
+
   const [openNewVgGameDialog, setOpenNewVgGameDialog] = useState<boolean>(false);
-  const [openSearchVgGameDialog, setOpenSearchVgGameDialog] = useState<boolean>(false);
-  const [vgGame] = useState<VgGame>({
-    id: "",
-    name: "",
-    developer: null,
-    publisher: null,
-    releaseDate: null,
-    description: null,
-    imageId: null,
-    consoleId: null
-  });
 
   // Overwrite any empty strings or null values with a different placeholder, for better user experiences
   let name = vgGame["name"]
@@ -120,11 +119,14 @@ function VgGameTable(): ReactElement {
   return (
     <>
       <p>Select Game:</p>
-      <button>Add Game</button>
-      <div>
-        <label htmlFor={"game-search"}>Search games: </label>
-        <input type={"search"} id={"game-search"} name={"game-search"}/>
-      </div>
+      <button onClick={() => {
+        setOpenNewVgGameDialog(true)
+      }}>Add Game
+      </button>
+      <NewVgGameForm openDialog={openNewVgGameDialog} setOpenDialog={setOpenNewVgGameDialog} setVgGame={setVgGame}/>
+
+      <SelectGameDropdown setVgGame={setVgGame}/>
+
       <table className={"game-table"}>
         <tbody>
         <tr>
@@ -153,52 +155,171 @@ function VgGameTable(): ReactElement {
   );
 }
 
-function NewVgPurchaseTable(): ReactElement {
+interface NewVgPurchaseTableProps {
+  vgConsole: VgConsole;
+  vgGame: VgGame;
+  setOpenDialogNewVgPurchase: Dispatch<SetStateAction<boolean>>;
+}
+
+function NewVgPurchaseTable(props: Readonly<NewVgPurchaseTableProps>): ReactElement {
+  const {vgConsole, vgGame, setOpenDialogNewVgPurchase} = props;
+
+  const defaultForm = {
+    name: undefined,
+    purchaseDate: undefined,
+    costBase: undefined,
+    costTax: undefined,
+    costShipping: undefined,
+    costOther: undefined,
+    notes: undefined,
+    imageId: undefined,
+    consoleId: undefined,
+    gameId: undefined
+  }
+  const [form, setForm] = useState(defaultForm)
+
+  const handleChange = (event: { target: { name: any; value: any; }; }) => {
+    setForm({
+      ...form,
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  const submitForm = (event: FormEvent) => {
+    event.preventDefault()
+
+    fetch("api/purchases", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        alert(`New purchase added: \n{\n  id: ${data.id}\n  name: ${data.name}\n  purchaseDate: ${data.purchaseDate}\n  costBase: ${data.costBase}\n  costTax: ${data.costTax}\n  costShipping: ${data.costShipping}\n  costOther: ${data.costOther}\n  imageId: ${data.imageId}\n  consoleId: ${data.consoleId}\n  gameId: ${data.gameId}\n}`)
+      })
+      .catch(err => console.log(err))
+    setForm(defaultForm)
+    setOpenDialogNewVgPurchase(false)
+  }
+
   return (
     <>
       <p>Define purchase:</p>
-      <form>
+      <form onSubmit={submitForm}>
         <table>
           <tbody>
           <tr>
-            <th scope={"row"}><label htmlFor='name'>Name: </label></th>
-            <td><input type="text" name={"name"} id={"name"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='name'>Name: </label>
+            </th>
+            <td>
+              <input type="text" name={"name"} id={"name"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='purchase-date'>Purchase Date: </label></th>
-            <td><input type="date" name={"purchase-date"} id={"purchase-date"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='purchase-date'>Purchase Date: </label>
+            </th>
+            <td>
+              <input type="date" name={"purchaseDate"} id={"purchaseDate"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='cost-base'>Base Cost: $ </label></th>
-            <td><input type="number" name={"cost-base"} id={"cost-base"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='cost-base'>Base Cost: $ </label>
+            </th>
+            <td>
+              <input type="number" name={"costBase"} id={"costBase"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='cost-tax'>Tax: $ </label></th>
-            <td><input type="number" name={"cost-tax"} id={"cost-tax"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='cost-tax'>Tax: $ </label>
+            </th>
+            <td>
+              <input type="number" name={"costTax"} id={"costTax"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='cost-shipping'>Shipping: $ </label></th>
-            <td><input type="number" name={"cost-shipping"} id={"cost-shipping"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='cost-shipping'>Shipping: $ </label>
+            </th>
+            <td>
+              <input type="number" name={"costShipping"} id={"costShipping"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='cost-other'>Misc. Fees: $ </label></th>
-            <td><input type="number" name={"cost-other"} id={"cost-other"} required={true}/></td>
+            <th scope={"row"}>
+              <label htmlFor='cost-other'>Misc. Fees: $ </label>
+            </th>
+            <td>
+              <input type="number" name={"costOther"} id={"costOther"} required={true} onChange={handleChange}/>
+            </td>
           </tr>
           <tr>
-            <th scope={"row"}><label htmlFor='notes'>Notes: </label></th>
-            <td><textarea name={"notes"} id={"notes"} rows={10}></textarea></td>
+            <th scope={"row"}>
+              <label htmlFor='notes'>Notes: </label>
+            </th>
+            <td>
+              <textarea name={"notes"} id={"notes"} rows={10} onChange={handleChange}></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"imageId"}>Image ID: </label>
+            </th>
+            <td>
+              To Do
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"consoleId"}>Console ID: </label>
+            </th>
+            <td>
+              <input type={"text"} name={"consoleId"} id={"consoleId"} disabled={true} defaultValue={vgConsole.id} onChange={handleChange}/>
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"gameId"}>Game ID: </label>
+            </th>
+            <td>
+              <input type={"text"} name={"gameId"} id={"gameId"} disabled={true} defaultValue={vgGame.id} onChange={handleChange}/>
+            </td>
           </tr>
           </tbody>
         </table>
       </form>
       <span>
-        <button>Add Purchase</button>
+        <button type={"submit"} onClick={submitForm}>Add Purchase</button>
       </span>
     </>
   );
 }
 
 export default function NewVgPurchaseForm() {
+  const [vgConsole, setVgConsole] = useState<VgConsole>({
+    id: "",
+    name: "",
+    manufacturer: null,
+    releaseDate: null,
+    description: null,
+    imageId: null
+  });
+  const [vgGame, setVgGame] = useState<VgGame>({
+    id: "",
+    name: "",
+    developer: null,
+    publisher: null,
+    releaseDate: null,
+    description: null,
+    imageId: null,
+    consoleId: null
+  });
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   return (
@@ -214,12 +335,12 @@ export default function NewVgPurchaseForm() {
 
         <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
           <div id={"purchase-form-console-game"} className={"purchase-form"}>
-            <VgConsoleTable/>
-            <VgGameTable/>
+            <VgConsoleTable vgConsole={vgConsole} setVgConsole={setVgConsole}/>
+            <VgGameTable vgGame={vgGame} setVgGame={setVgGame}/>
           </div>
 
           <div id={"purchase-form-add-purchase"} className="purchase-form">
-            <NewVgPurchaseTable/>
+            <NewVgPurchaseTable vgConsole={vgConsole} vgGame={vgGame} setOpenDialogNewVgPurchase={setOpenDialog}/>
           </div>
         </span>
 
