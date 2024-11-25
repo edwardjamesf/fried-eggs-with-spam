@@ -1,4 +1,5 @@
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import VgPurchase from "../models/VgPurchase.ts";
 import {IconButton} from "@mui/material";
 import {useState} from "react";
@@ -91,7 +92,7 @@ function EditPurchaseModal(props: {
         </table>
       </form>
       <span>
-        <button>Save</button>
+        <button onClick={() => {alert("Edit purchase information not yet implemented")}}>Save</button>
         <button onClick={() => setOpenEditPurchaseModal(false)}>Close</button>
       </span>
     </dialog>
@@ -109,6 +110,7 @@ export default function PurchasesTable(props: { readonly dbPurchases: VgPurchase
         <thead>
         <tr>
           <th scope={"col"}>Name</th>
+          <th scope={"col"}>Edit/Delete</th>
           <th scope={"col"}>Purchase Date</th>
           <th scope={"col"}>Notes</th>
           <th scope={"col"}>Cost</th>
@@ -126,10 +128,17 @@ export default function PurchasesTable(props: { readonly dbPurchases: VgPurchase
           <tr key={purchase.id}>
             <th scope={"row"}>
               {purchase.name}
-              <IconButton onClick={() => setOpenEditPurchaseModal(true)} color={"primary"}><EditIcon/></IconButton>
+            </th>
+            <td>
+              <IconButton onClick={() => setOpenEditPurchaseModal(true)} color={"primary"}>
+                <EditIcon/>
+              </IconButton>
               <EditPurchaseModal purchase={purchase} openEditPurchaseModal={openEditPurchaseModal}
                                  setOpenEditPurchaseModal={setOpenEditPurchaseModal}/>
-            </th>
+              <IconButton onClick={() => {alert("Delete not yet implemented")}} color={"error"}>
+                <DeleteIcon/>
+              </IconButton>
+            </td>
             <td>{purchase.purchaseDate}</td>
             <td>{purchase.notes}</td>
             <td>{purchase.costTotal}</td>
