@@ -20,7 +20,6 @@ export default function PurchasesPage() {
   }]);
 
   useEffect(() => {
-    // fetchDbPurchases();
     fetch(`api/purchases/all?limit=10`)
       .then((res) => {
         return res.json()
@@ -28,7 +27,7 @@ export default function PurchasesPage() {
       .then((data) => {
         setPurchases(data)
       })
-  }, [purchases]);
+  }, []);
 
   return (
     <>

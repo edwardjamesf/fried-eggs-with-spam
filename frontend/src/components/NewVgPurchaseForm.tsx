@@ -2,9 +2,16 @@ import {ReactElement, useState} from "react";
 import VgConsole from "../models/VgConsole.ts";
 import VgGame from "../models/VgGame.ts";
 import NewVgConsoleForm from "./NewVgConsoleForm.tsx";
+import SelectConsoleDropdown from "./SelectConsoleDropdown.tsx";
 
+/**
+ * Section of the overall Add New Purchase Form to link the purchase with a console.
+ *
+ * @constructor
+ */
 function VgConsoleTable(): ReactElement {
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openNewVgConsoleDialog, setOpenNewVgConsoleDialog] = useState<boolean>(false);
+  const [openSearchVgConsoleDialog, setOpenSearchVgConsoleDialog] = useState<boolean>(false);
   const [vgConsole, setVgConsole] = useState<VgConsole>({
     id: "",
     name: "",
@@ -14,6 +21,7 @@ function VgConsoleTable(): ReactElement {
     imageId: null
   });
 
+  // Overwrite any empty strings or null values with a different placeholder, for better user experiences
   let name = vgConsole["name"]
   let manufacturer = vgConsole["manufacturer"]
   let releaseDate = vgConsole["releaseDate"]
@@ -31,15 +39,18 @@ function VgConsoleTable(): ReactElement {
     description = "N/A"
   }
 
+  // Display the console data in the form
   return (
     <>
       <p>Select console:</p>
-      <button onClick={() => {setOpenDialog(true)}}>Add Console</button>
-      <NewVgConsoleForm openDialog={openDialog} setOpenDialog={setOpenDialog}/>
-      <div>
-        <label htmlFor={"console-search"}>Search consoles: </label>
-        <input type={"search"} id={"console-search"} name={"console-search"}/>
-      </div>
+      {/*Add a new console to the database*/}
+      <button onClick={() => {setOpenNewVgConsoleDialog(true)}}>Add Console</button>
+      <NewVgConsoleForm openDialog={openNewVgConsoleDialog} setOpenDialog={setOpenNewVgConsoleDialog} setVgConsole={setVgConsole}/>
+
+      {/*Search database for an existing console*/}
+      <SelectConsoleDropdown setVgConsole={setVgConsole}/>
+
+      {/*Display the selected console data in the form*/}
       <table className={"console-table"}>
         <tbody>
         <tr>
@@ -64,7 +75,14 @@ function VgConsoleTable(): ReactElement {
   );
 }
 
+/**
+ * Section of the overall Add New Purchase Form to link the purchase with a game.
+ *
+ * @constructor
+ */
 function VgGameTable(): ReactElement {
+  const [openNewVgGameDialog, setOpenNewVgGameDialog] = useState<boolean>(false);
+  const [openSearchVgGameDialog, setOpenSearchVgGameDialog] = useState<boolean>(false);
   const [vgGame] = useState<VgGame>({
     id: "",
     name: "",
@@ -75,6 +93,8 @@ function VgGameTable(): ReactElement {
     imageId: null,
     consoleId: null
   });
+
+  // Overwrite any empty strings or null values with a different placeholder, for better user experiences
   let name = vgGame["name"]
   let developer = vgGame["developer"]
   let publisher = vgGame["publisher"]
@@ -96,7 +116,7 @@ function VgGameTable(): ReactElement {
     description = "N/A"
   }
 
-
+  // Display the game data in the form
   return (
     <>
       <p>Select Game:</p>

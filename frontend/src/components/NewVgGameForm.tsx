@@ -1,30 +1,32 @@
 import {Dispatch, FormEvent, SetStateAction, useState} from "react";
-import VgConsole from "../models/VgConsole.ts";
+import VgGame from "../models/VgGame.ts";
 
 /**
- * Interface for the Add New Console form
+ * Interface for the Add New Game form
  */
-interface NewVgConsoleFormProps {
+interface NewVgGameFormProps {
   openDialog: boolean;
   setOpenDialog: Dispatch<SetStateAction<boolean>>;
-  setVgConsole: Dispatch<SetStateAction<VgConsole>>;
+  setVgGame: Dispatch<SetStateAction<VgGame>>;
 }
 
 /**
- * Modal dialog for adding new console information to the database
+ * Modal dialog for adding new game information to the database
  *
  * @param props
  * @constructor
  */
-export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>) {
-  const {openDialog, setOpenDialog, setVgConsole} = props;
+export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
+  const {openDialog, setOpenDialog, setVgGame} = props;
   const defaultForm = {
     name: undefined,
-    manufacturer: undefined,
+    developer: undefined,
+    publisher: undefined,
     releaseDate: undefined,
     description: undefined,
+    consoleName: undefined,
   }
-  const [form, setForm] = useState(defaultForm)
+  const [form, setForm] = useState(defaultForm);
 
   const handleChange = (event: { target: { name: any; value: any; }; }) => {
     setForm({
@@ -36,7 +38,7 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
   const submitForm = (event: FormEvent) => {
     event.preventDefault()
 
-    fetch("api/consoles", {
+    fetch("api/games", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,8 +48,8 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        alert(`New console added: \n{\n  id: ${data.id}\n  name: ${data.name}\n  manufacturer: ${data.manufacturer}\n  releaseDate: ${data.releaseDate}\n  description: ${data.description}\n  imageId: ${data.imageId}\n}`)
-        setVgConsole(data);
+        alert(`New game added: \n{\n  id: ${data.id}\n  name: ${data.name}\n  manufacturer: ${data.manufacturer}\n  releaseDate: ${data.releaseDate}\n  description: ${data.description}\n  imageId: ${data.imageId}\n}`)
+        setVgGame(data);
       })
       .catch(err => console.log(err))
     setForm(defaultForm)
@@ -74,14 +76,28 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
           </tr>
           <tr>
             <th scope={"row"}>
-              <label htmlFor={"name"}>Manufacturer:</label>
+              <label htmlFor={"name"}>Developer:</label>
             </th>
             <td>
               <input
                 type={"text"}
-                name={"manufacturer"}
-                id={"manufacturer"}
-                value={form.manufacturer}
+                name={"developer"}
+                id={"developer"}
+                value={form.developer}
+                onChange={handleChange}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"name"}>Publisher:</label>
+            </th>
+            <td>
+              <input
+                type={"text"}
+                name={"publisher"}
+                id={"publisher"}
+                value={form.publisher}
                 onChange={handleChange}
               />
             </td>
@@ -123,3 +139,4 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
     </dialog>
   );
 }
+
