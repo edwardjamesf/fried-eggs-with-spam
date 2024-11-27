@@ -6,20 +6,26 @@ import VgGame from "../models/VgGame.ts";
  */
 interface SelectGameDropdownProps {
   setVgGame: Dispatch<SetStateAction<VgGame>>;
+  vgPurchaseForm: any;
+  setVgPurchaseForm: Dispatch<SetStateAction<any>> | undefined;
 }
 
 export default function SelectGameDropdown(props : Readonly<SelectGameDropdownProps>) {
-  const {setVgGame} = props;
+  const {setVgGame, vgPurchaseForm, setVgPurchaseForm} = props;
   const [vgGames, setVgGames] = useState<VgGame[] | undefined>(undefined);
 
   useEffect(() => {
     fetch(`api/games/all`)
       .then((res) => {
-        return res.json()
+        if (res.ok) {
+          return res.json()
+        }
+        return undefined;
       })
       .then((data) => {
         setVgGames(data)
       })
+      .catch((error) => {console.log(error)})
   }, [])
 
   const handleChange = (event: { target: { value: { toString: () => any; }; }; }) => {
@@ -33,8 +39,12 @@ export default function SelectGameDropdown(props : Readonly<SelectGameDropdownPr
         return res.json()
       })
       .then((data) => {
-        console.log(data);
+        console.log(data)
         setVgGame(data);
+        if (vgPurchaseForm !== undefined && setVgPurchaseForm !== undefined) {
+          vgPurchaseForm.gameId = data.id;
+          setVgPurchaseForm(vgPurchaseForm);
+        }
       })
   }
 

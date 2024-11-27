@@ -1,10 +1,10 @@
 export default interface VgGame {
   id: string;
   name: string;
-  developer: string | null;
-  publisher: string | null;
-  releaseDate: string | null;
-  description: string | null;
-  imageId: string | null;
-  consoleId: string | null;
+  developer: string | undefined;
+  publisher: string | undefined;
+  releaseDate: string | undefined;
+  description: string | undefined;
+  imageId: string | undefined;
+  consoleId: string | undefined;
 }

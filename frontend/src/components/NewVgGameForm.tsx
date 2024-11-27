@@ -1,14 +1,5 @@
-import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
 import VgGame from "../models/VgGame.ts";
-
-/**
- * Interface for the Add New Game form
- */
-interface NewVgGameFormProps {
-  openDialog: boolean;
-  setOpenDialog: Dispatch<SetStateAction<boolean>>;
-  setVgGame: Dispatch<SetStateAction<VgGame>>;
-}
 
 /**
  * Modal dialog for adding new game information to the database
@@ -16,23 +7,33 @@ interface NewVgGameFormProps {
  * @param props
  * @constructor
  */
+interface NewVgGameFormProps {
+  openDialog: boolean;
+  setOpenDialog: Dispatch<SetStateAction<boolean>>;
+  setVgGame: Dispatch<SetStateAction<VgGame>>;
+  vgPurchaseForm: any;
+  setVgPurchaseForm: Dispatch<SetStateAction<any>> | undefined;
+}
 export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
-  const {openDialog, setOpenDialog, setVgGame} = props;
-  const defaultForm = {
-    name: undefined,
+  const {openDialog, setOpenDialog, setVgGame, vgPurchaseForm, setVgPurchaseForm} = props;
+
+  const defaultVgGame = {
+    id: "",
+    name: "",
     developer: undefined,
     publisher: undefined,
     releaseDate: undefined,
     description: undefined,
-    consoleName: undefined,
+    imageId: undefined,
+    consoleId: undefined,
   }
-  const [form, setForm] = useState(defaultForm);
+  const [vgGameForm, setVgGameForm] = useState(defaultVgGame);
 
-  const handleChange = (event: { target: { name: any; value: any; }; }) => {
-    setForm({
-      ...form,
+  const handleChangeVgGameForm = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setVgGameForm({
+      ...vgGameForm,
       [event.target.name]: event.target.value,
-    })
+    });
   }
 
   const submitForm = (event: FormEvent) => {
@@ -43,16 +44,20 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(vgGameForm)
     })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        alert(`New game added: \n{\n  id: ${data.id}\n  name: ${data.name}\n  manufacturer: ${data.manufacturer}\n  releaseDate: ${data.releaseDate}\n  description: ${data.description}\n  imageId: ${data.imageId}\n}`)
+        alert(`New game added: ${JSON.stringify(data)}`);
         setVgGame(data);
+        if (vgPurchaseForm !== undefined && setVgPurchaseForm !== undefined) {
+          vgPurchaseForm.gameId = data.id;
+          setVgPurchaseForm(vgPurchaseForm);
+        }
       })
       .catch(err => console.log(err))
-    setForm(defaultForm)
+    setVgGameForm(defaultVgGame);
     setOpenDialog(false)
   }
 
@@ -68,9 +73,10 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
             <td>
               <input
                 type={"text"}
-                name={"name"} id={"name"}
-                value={form.name}
-                onChange={handleChange}
+                name={"name"}
+                id={"name"}
+                defaultValue={vgGameForm.name}
+                onChange={handleChangeVgGameForm}
               />
             </td>
           </tr>
@@ -83,8 +89,8 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
                 type={"text"}
                 name={"developer"}
                 id={"developer"}
-                value={form.developer}
-                onChange={handleChange}
+                defaultValue={vgGameForm.developer}
+                onChange={handleChangeVgGameForm}
               />
             </td>
           </tr>
@@ -97,8 +103,8 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
                 type={"text"}
                 name={"publisher"}
                 id={"publisher"}
-                value={form.publisher}
-                onChange={handleChange}
+                defaultValue={vgGameForm.publisher}
+                onChange={handleChangeVgGameForm}
               />
             </td>
           </tr>
@@ -111,8 +117,9 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
                 type={"date"}
                 name={"releaseDate"}
                 id={"releaseDate"}
-                value={form.releaseDate}
-                onChange={handleChange}/>
+                defaultValue={vgGameForm.releaseDate}
+                onChange={handleChangeVgGameForm}
+              />
             </td>
           </tr>
           <tr>
@@ -124,8 +131,37 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
                 name={"description"}
                 id={"description"}
                 rows={10}
-                value={form.description}
-                onChange={handleChange}/>
+                defaultValue={vgGameForm.description}
+                onChange={handleChangeVgGameForm}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"imageId"}>Image ID:</label>
+            </th>
+            <td>
+              <input
+                type={"text"}
+                name={"imageId"}
+                id={"imageId"}
+                defaultValue={vgGameForm.imageId}
+                onChange={handleChangeVgGameForm}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"consoleId"}>Console ID:</label>
+            </th>
+            <td>
+              <input
+                type={"text"}
+                name={"consoleId"}
+                id={"consoleId"}
+                defaultValue={vgGameForm.consoleId}
+                onChange={handleChangeVgGameForm}
+              />
             </td>
           </tr>
           </tbody>

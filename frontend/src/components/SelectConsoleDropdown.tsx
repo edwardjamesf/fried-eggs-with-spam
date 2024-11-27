@@ -6,20 +6,26 @@ import VgConsole from "../models/VgConsole.ts";
  */
 interface SelectConsoleDropdownProps {
   setVgConsole: Dispatch<SetStateAction<VgConsole>>;
+  vgPurchaseForm: any;
+  setVgPurchaseForm: Dispatch<SetStateAction<any>> | undefined;
 }
 
 export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDropdownProps>) {
-  const {setVgConsole} = props;
+  const {setVgConsole, vgPurchaseForm, setVgPurchaseForm} = props;
   const [vgConsoles, setVgConsoles] = useState<VgConsole[] | undefined>(undefined);
 
   useEffect(() => {
     fetch(`api/consoles/all`)
       .then((res) => {
-        return res.json()
+        if (res.ok) {
+          return res.json()
+        }
+        return undefined;
       })
       .then((data) => {
         setVgConsoles(data)
       })
+      .catch((error) => {console.log(error)})
   }, [])
 
   const handleChange = (event: { target: { value: { toString: () => any; }; }; }) => {
@@ -33,8 +39,12 @@ export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDrop
         return res.json()
       })
       .then((data) => {
-        console.log(data);
+        console.log(data)
         setVgConsole(data);
+        if (vgPurchaseForm !== undefined && setVgPurchaseForm !== undefined) {
+          vgPurchaseForm.consoleId = data.id;
+          setVgPurchaseForm(vgPurchaseForm);
+        }
       })
   }
 

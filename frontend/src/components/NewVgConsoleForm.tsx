@@ -1,14 +1,5 @@
-import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
 import VgConsole from "../models/VgConsole.ts";
-
-/**
- * Interface for the Add New Console form
- */
-interface NewVgConsoleFormProps {
-  openDialog: boolean;
-  setOpenDialog: Dispatch<SetStateAction<boolean>>;
-  setVgConsole: Dispatch<SetStateAction<VgConsole>>;
-}
 
 /**
  * Modal dialog for adding new console information to the database
@@ -16,21 +7,31 @@ interface NewVgConsoleFormProps {
  * @param props
  * @constructor
  */
+interface NewVgConsoleFormProps {
+  openDialog: boolean;
+  setOpenDialog: Dispatch<SetStateAction<boolean>>;
+  setVgConsole: Dispatch<SetStateAction<VgConsole>>;
+  vgPurchaseForm: any;
+  setVgPurchaseForm: Dispatch<SetStateAction<any>> | undefined;
+}
 export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>) {
-  const {openDialog, setOpenDialog, setVgConsole} = props;
-  const defaultForm = {
-    name: undefined,
+  const {openDialog, setOpenDialog, setVgConsole, vgPurchaseForm, setVgPurchaseForm} = props;
+
+  const defaultVgConsole = {
+    id: "",
+    name: "",
     manufacturer: undefined,
     releaseDate: undefined,
     description: undefined,
+    imageId: undefined,
   }
-  const [form, setForm] = useState(defaultForm)
+  const [vgConsoleForm, setVgConsoleForm] = useState(defaultVgConsole);
 
-  const handleChange = (event: { target: { name: any; value: any; }; }) => {
-    setForm({
-      ...form,
+  const handleChangeVgConsoleForm = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setVgConsoleForm({
+      ...vgConsoleForm,
       [event.target.name]: event.target.value,
-    })
+    });
   }
 
   const submitForm = (event: FormEvent) => {
@@ -41,16 +42,20 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form)
+      body: JSON.stringify(vgConsoleForm)
     })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        alert(`New console added: \n{\n  id: ${data.id}\n  name: ${data.name}\n  manufacturer: ${data.manufacturer}\n  releaseDate: ${data.releaseDate}\n  description: ${data.description}\n  imageId: ${data.imageId}\n}`)
+        alert(`New console added: ${JSON.stringify(data)}`)
         setVgConsole(data);
+        if (vgPurchaseForm !== undefined && setVgPurchaseForm !== undefined) {
+          vgPurchaseForm.consoleId = data.id;
+          setVgPurchaseForm(vgPurchaseForm);
+        }
       })
       .catch(err => console.log(err))
-    setForm(defaultForm)
+    setVgConsoleForm(defaultVgConsole);
     setOpenDialog(false)
   }
 
@@ -67,8 +72,8 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
               <input
                 type={"text"}
                 name={"name"} id={"name"}
-                value={form.name}
-                onChange={handleChange}
+                defaultValue={vgConsoleForm.name}
+                onChange={handleChangeVgConsoleForm}
               />
             </td>
           </tr>
@@ -81,8 +86,8 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
                 type={"text"}
                 name={"manufacturer"}
                 id={"manufacturer"}
-                value={form.manufacturer}
-                onChange={handleChange}
+                defaultValue={vgConsoleForm.manufacturer}
+                onChange={handleChangeVgConsoleForm}
               />
             </td>
           </tr>
@@ -95,8 +100,9 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
                 type={"date"}
                 name={"releaseDate"}
                 id={"releaseDate"}
-                value={form.releaseDate}
-                onChange={handleChange}/>
+                defaultValue={vgConsoleForm.releaseDate}
+                onChange={handleChangeVgConsoleForm}
+              />
             </td>
           </tr>
           <tr>
@@ -108,8 +114,23 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
                 name={"description"}
                 id={"description"}
                 rows={10}
-                value={form.description}
-                onChange={handleChange}/>
+                defaultValue={vgConsoleForm.description}
+                onChange={handleChangeVgConsoleForm}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th scope={"row"}>
+              <label htmlFor={"imageId"}>Image ID:</label>
+            </th>
+            <td>
+              <input
+                type={"text"}
+                name={"imageId"}
+                id={"imageId"}
+                defaultValue={vgConsoleForm.imageId}
+                onChange={handleChangeVgConsoleForm}
+              />
             </td>
           </tr>
           </tbody>

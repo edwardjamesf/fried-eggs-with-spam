@@ -1,14 +1,15 @@
 export default interface VgPurchase {
-  id: string | null;
+  id: string | undefined;
   name: string;
-  purchaseDate: string | null;
-  costBase: number;
-  costTax: number;
-  costShipping: number;
-  costOther: number;
-  costTotal: number | null;
-  notes: string | null;
-  imageId: string | null;
-  consoleId: string | null;
-  gameId: string | null;
+  purchaseDate: string | undefined;
+  purchaseFrom: string | undefined;
+  costBase: number | undefined;
+  costTax: number | undefined;
+  costShipping: number | undefined;
+  costOther: number | undefined;
+  costTotal: number | undefined;
+  notes: string | undefined;
+  imageId: string | undefined;
+  consoleId: string | undefined;
+  gameId: string | undefined;
 }

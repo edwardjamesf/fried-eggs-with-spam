@@ -7,26 +7,31 @@ export default function PurchasesPage() {
   const [purchases, setPurchases] = useState<VgPurchase[]>([{
     id: "",
     name: "",
-    purchaseDate: null,
+    purchaseDate: undefined,
+    purchaseFrom: undefined,
     costBase: 0.0,
     costTax: 0.0,
     costShipping: 0.0,
     costOther: 0.0,
     costTotal: 0.0,
-    notes: null,
-    imageId: null,
-    consoleId: null,
-    gameId: null,
+    notes: undefined,
+    imageId: undefined,
+    consoleId: undefined,
+    gameId: undefined,
   }]);
 
   useEffect(() => {
     fetch(`api/purchases/all?limit=10`)
       .then((res) => {
-        return res.json()
+        if (res.ok) {
+          return res.json()
+        }
+        return undefined;
       })
       .then((data) => {
         setPurchases(data)
       })
+      .catch((error) => {console.log(error)})
   }, []);
 
   return (
@@ -34,8 +39,6 @@ export default function PurchasesPage() {
       <div style={{ border: "3px solid red", margin: "2em" }}>
         <h1>Things I still need to do:</h1>
         <ul>
-          <li>Add purchasedFrom field (text) to purchases database table</li>
-          <li>Update backend to include purchasedFrom field in API call</li>
           <li>Update PurchasesTable to show purchasedFrom field</li>
           <li>Update NewVgPurchaseForm to include purchasedFrom field</li>
           <li>Add edit purchase feature</li>
@@ -45,7 +48,7 @@ export default function PurchasesPage() {
         </ul>
       </div>
       <NewVgPurchaseForm/>
-      <PurchasesTable dbPurchases={purchases}/>
+      <PurchasesTable purchases={purchases}/>
     </>
   );
 }
