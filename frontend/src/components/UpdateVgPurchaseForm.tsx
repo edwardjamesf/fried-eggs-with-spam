@@ -1,13 +1,14 @@
 import VgPurchase from "../models/VgPurchase.ts";
 import {ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useState} from "react";
 
-export default function UpdateVgPurchaseForm(props: {
-  readonly purchase: VgPurchase,
-  readonly openEditPurchaseModal: boolean,
-  readonly setOpenEditPurchaseModal: (openEditPurchaseModal: boolean) => void
-  readonly purchases: VgPurchase[];
-  readonly setPurchases: Dispatch<SetStateAction<VgPurchase[]>>;
-}) {
+interface UpdateVgPurchaseFormProps {
+  purchase: VgPurchase,
+  openEditPurchaseModal: boolean,
+  setOpenEditPurchaseModal: (openEditPurchaseModal: boolean) => void
+  purchases: VgPurchase[];
+  setPurchases: Dispatch<SetStateAction<VgPurchase[]>>;
+}
+export default function UpdateVgPurchaseForm(props: Readonly<UpdateVgPurchaseFormProps>) {
   const {purchase, openEditPurchaseModal, setOpenEditPurchaseModal, purchases, setPurchases} = props;
 
   const defaultUpdateVgPurchaseForm = {

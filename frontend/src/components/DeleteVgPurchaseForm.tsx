@@ -1,5 +1,6 @@
 import VgPurchase from "../models/VgPurchase.ts";
 import {Dispatch, SetStateAction} from "react";
+import VgPurchaseTable from "./VgPurchaseTable.tsx";
 
 interface DeleteVgPurchaseFormProps {
   openDeleteVgPurchaseModal: boolean;
@@ -30,21 +31,9 @@ export default function DeleteVgPurchaseForm(props: Readonly<DeleteVgPurchaseFor
   }
 
   return (
-    <dialog open={openDeleteVgPurchaseModal}>
-      <h1>Are you sure you want to delete the following purchase?</h1>
-      <label htmlFor={"name"}>Name: </label>
-      <input
-        type={"text"}
-        name={"name"}
-        disabled={true}
-        value={purchase.name}
-      />
-      <label htmlFor={"notes"}>Notes: </label>
-      <textarea
-        name={"notes"}
-        disabled={true}
-        value={purchase.notes}
-      />
+    <dialog className={"dialog-modal"} open={openDeleteVgPurchaseModal}>
+      <h3>Are you sure you want to delete the following purchase?</h3>
+      <VgPurchaseTable purchase={purchase} isReadOnly={true}/>
       <button onClick={() => setOpenDeleteVgPurchaseModal(false)}>Cancel</button>
       <button onClick={deleteVgPurchase}>Delete</button>
     </dialog>

@@ -13,6 +13,7 @@ interface PurchaseTableProps {
 export default function PurchasesTable(props: Readonly<PurchaseTableProps>) {
   const {purchases, setPurchases} = props;
 
+  const [purchase, setPurchase] = useState<VgPurchase>(purchases[0]);
   const [openEditPurchaseModal, setOpenEditPurchaseModal] = useState(false);
   const [openDeletePurchaseModal, setOpenDeletePurchaseModal] = useState(false);
 
@@ -38,42 +39,48 @@ export default function PurchasesTable(props: Readonly<PurchaseTableProps>) {
         </tr>
         </thead>
         <tbody>
-        {purchases?.map((purchase) => (
-          <tr key={purchase.id}>
+        {purchases?.map((item) => (
+          <tr key={item.id}>
             <th scope={"row"}>
-              {purchase.name}
+              {item.name}
             </th>
             <td>
-              <IconButton onClick={() => setOpenEditPurchaseModal(true)} color={"primary"}>
+              <IconButton onClick={() => {setPurchase(item); setOpenEditPurchaseModal(true)}} color={"primary"}>
                 <EditIcon/>
               </IconButton>
-              <UpdateVgPurchaseForm
-                purchase={purchase}
-                openEditPurchaseModal={openEditPurchaseModal}
-                setOpenEditPurchaseModal={setOpenEditPurchaseModal}
-                purchases={purchases}
-                setPurchases={setPurchases}
-              />
-              <IconButton onClick={() => setOpenDeletePurchaseModal(true)} color={"error"}>
+              <IconButton onClick={() => {setPurchase(item); setOpenDeletePurchaseModal(true)}} color={"error"}>
                 <DeleteIcon/>
               </IconButton>
-              <DeleteVgPurchaseForm openDeleteVgPurchaseModal={openDeletePurchaseModal} setOpenDeleteVgPurchaseModal={setOpenDeletePurchaseModal} purchase={purchase}/>
             </td>
-            <td>{purchase.purchaseDate}</td>
-            <td>{purchase.purchaseFrom}</td>
-            <td>{purchase.notes}</td>
-            <td>{purchase.costTotal}</td>
-            <td>{purchase.costBase}</td>
-            <td>{purchase.costTax}</td>
-            <td>{purchase.costShipping}</td>
-            <td>{purchase.costOther}</td>
-            <td>{purchase.imageId}</td>
-            <td>{purchase.consoleId}</td>
-            <td>{purchase.gameId}</td>
+            <td>{item.purchaseDate}</td>
+            <td>{item.purchaseFrom}</td>
+            <td>{item.notes}</td>
+            <td>{item.costTotal}</td>
+            <td>{item.costBase}</td>
+            <td>{item.costTax}</td>
+            <td>{item.costShipping}</td>
+            <td>{item.costOther}</td>
+            <td>{item.imageId}</td>
+            <td>{item.consoleId}</td>
+            <td>{item.gameId}</td>
           </tr>
         ))}
         </tbody>
       </table>
+
+      <UpdateVgPurchaseForm
+        purchase={purchase}
+        openEditPurchaseModal={openEditPurchaseModal}
+        setOpenEditPurchaseModal={setOpenEditPurchaseModal}
+        purchases={purchases}
+        setPurchases={setPurchases}
+      />
+
+      <DeleteVgPurchaseForm
+        openDeleteVgPurchaseModal={openDeletePurchaseModal}
+        setOpenDeleteVgPurchaseModal={setOpenDeletePurchaseModal}
+        purchase={purchase}
+      />
     </>
   );
 }
