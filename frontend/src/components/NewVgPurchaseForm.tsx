@@ -1,7 +1,7 @@
 import {ChangeEvent, Dispatch, ReactElement, SetStateAction, SyntheticEvent, useState} from "react";
 import VgConsole from "../models/VgConsole.ts";
 import VgGame from "../models/VgGame.ts";
-import NewVgConsoleForm from "./NewVgConsoleForm.tsx";
+import NewVgConsoleFormOld from "./NewVgConsoleFormOld.tsx";
 import SelectConsoleDropdown from "./SelectConsoleDropdown.tsx";
 import SelectGameDropdown from "./SelectGameDropdown.tsx";
 import NewVgGameForm from "./NewVgGameForm.tsx";
@@ -334,7 +334,7 @@ function PurchaseFormVgConsoleTable(props: Readonly<VgConsoleTableProps>): React
         setOpenNewVgConsoleDialog(true)
       }}>Add Console
       </button>
-      <NewVgConsoleForm
+      <NewVgConsoleFormOld
         openDialog={openNewVgConsoleDialog}
         setOpenDialog={setOpenNewVgConsoleDialog}
         setVgConsole={setVgConsole}

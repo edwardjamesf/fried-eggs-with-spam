@@ -1,16 +1,25 @@
+import VgConsole from '../models/VgConsole.ts';
 import {Dispatch, FormEvent, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
-import {createVgConsole, getVgConsolesAll} from '../api/ConsoleApi.ts';
-import VgConsole from '../models/VgConsole.ts';
+import dayjs from 'dayjs';
+import {deleteVgConsole, getVgConsolesAll, updateVgConsole} from '../api/ConsoleApi.ts';
 
-interface NewVgConsoleFormProps {
+interface UpdateVgConsoleFormProps {
   openForm: boolean;
   setOpenForm: Dispatch<SetStateAction<boolean>>;
+  vgConsole: VgConsole;
 }
 
-export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>) {
-  const {openForm, setOpenForm} = props;
+export default function UpdateVgConsoleForm(props: Readonly<UpdateVgConsoleFormProps>) {
+  const {openForm, setOpenForm, vgConsole} = props;
+
+  const handleDeleteVgConsole = () => {
+    deleteVgConsole(vgConsole).then((data) => {
+      console.log(data);
+      setOpenForm(false);
+    });
+  };
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -27,11 +36,11 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
           console.log(formJson);
-          createVgConsole(formJson as VgConsole).then((data) => {
+          updateVgConsole(formJson as VgConsole).then((data) => {
             console.log(data);
           });
           getVgConsolesAll().then((data) => {
-            console.log(data)
+            console.log(data);
           });
           handleCloseForm();
         }
@@ -40,8 +49,17 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
       <DialogTitle>Update Console Data</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{paddingBottom: '1em'}}>
-          Define information for the new console here.
+          Update information for the {vgConsole?.manufacturer} {vgConsole?.name} here.
         </DialogContentText>
+        <TextField
+          margin={'dense'}
+          id={'id'}
+          name={'id'}
+          label={'ID'}
+          type={'text'}
+          fullWidth
+          value={vgConsole?.id}
+        />
         <TextField
           autoFocus
           margin={'dense'}
@@ -50,6 +68,7 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
           label={'Manufacturer'}
           type={'text'}
           fullWidth
+          defaultValue={vgConsole?.manufacturer}
         />
         <TextField
           required
@@ -59,11 +78,13 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
           label={'Name'}
           type={'text'}
           fullWidth
+          defaultValue={vgConsole?.name}
         />
         <DatePicker
           sx={{marginTop: '1em', marginBottom: '1em', width: '100%'}}
           label={'Release Date'}
           name={'releaseDate'}
+          defaultValue={dayjs(vgConsole?.releaseDate)}
         />
         <TextField
           margin={'dense'}
@@ -74,6 +95,7 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
           multiline={true}
           rows={4}
           fullWidth
+          defaultValue={vgConsole?.description}
         />
         <TextField
           margin={'dense'}
@@ -88,7 +110,8 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>
-        <Button type={'submit'} variant={'contained'}>Add</Button>
+        <Button variant={'contained'} color={'error'} onClick={handleDeleteVgConsole}>Delete</Button>
+        <Button type={'submit'} variant={'contained'}>Update</Button>
       </DialogActions>
     </Dialog>
   );

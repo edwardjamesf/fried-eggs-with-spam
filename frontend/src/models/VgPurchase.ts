@@ -1,6 +1,6 @@
 export default interface VgPurchase {
   id: string | undefined;
-  name: string;
+  name: string | undefined;
   purchaseDate: string | undefined;
   purchaseFrom: string | undefined;
   costBase: number | undefined;
@@ -12,4 +12,6 @@ export default interface VgPurchase {
   imageId: string | undefined;
   consoleId: string | undefined;
   gameId: string | undefined;
+  createdAt: string | undefined;
+  modifiedAt: string | undefined;
 }
