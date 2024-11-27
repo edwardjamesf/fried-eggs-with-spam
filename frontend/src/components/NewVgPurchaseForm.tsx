@@ -12,6 +12,7 @@ import NewVgGameForm from "./NewVgGameForm.tsx";
  * @constructor
  */
 export default function NewVgPurchaseForm() {
+
   const defaultVgPurchaseForm = {
     name: "",
     purchaseDate: undefined,
@@ -73,16 +74,16 @@ export default function NewVgPurchaseForm() {
         if (res.ok) {
           return res.json()
         }
-        return undefined
+        throw new Error(res.statusText);
       })
       .then(data => {
         console.log(data)
         alert(`New purchase added: ${JSON.stringify(data)}`);
+        setVgPurchaseForm(defaultVgPurchaseForm);
+        setOpenDialog(false);
       })
       .catch(err => console.log(err))
-    setVgPurchaseForm(defaultVgPurchaseForm);
   }
-
 
   return (
     <>

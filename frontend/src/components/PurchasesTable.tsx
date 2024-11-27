@@ -2,11 +2,19 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VgPurchase from "../models/VgPurchase.ts";
 import {IconButton} from "@mui/material";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
+import UpdateVgPurchaseForm from "./UpdateVgPurchaseForm.tsx";
+import DeleteVgPurchaseForm from "./DeleteVgPurchaseForm.tsx";
 
-export default function PurchasesTable(props: { readonly purchases: VgPurchase[] }) {
+interface PurchaseTableProps {
+  purchases: VgPurchase[];
+  setPurchases: Dispatch<SetStateAction<VgPurchase[]>>;
+}
+export default function PurchasesTable(props: Readonly<PurchaseTableProps>) {
+  const {purchases, setPurchases} = props;
+
   const [openEditPurchaseModal, setOpenEditPurchaseModal] = useState(false);
-  const {purchases} = props;
+  const [openDeletePurchaseModal, setOpenDeletePurchaseModal] = useState(false);
 
   return (
     <>
@@ -39,11 +47,17 @@ export default function PurchasesTable(props: { readonly purchases: VgPurchase[]
               <IconButton onClick={() => setOpenEditPurchaseModal(true)} color={"primary"}>
                 <EditIcon/>
               </IconButton>
-              <EditPurchaseModal purchase={purchase} openEditPurchaseModal={openEditPurchaseModal}
-                                 setOpenEditPurchaseModal={setOpenEditPurchaseModal}/>
-              <IconButton onClick={() => {alert("Delete not yet implemented")}} color={"error"}>
+              <UpdateVgPurchaseForm
+                purchase={purchase}
+                openEditPurchaseModal={openEditPurchaseModal}
+                setOpenEditPurchaseModal={setOpenEditPurchaseModal}
+                purchases={purchases}
+                setPurchases={setPurchases}
+              />
+              <IconButton onClick={() => setOpenDeletePurchaseModal(true)} color={"error"}>
                 <DeleteIcon/>
               </IconButton>
+              <DeleteVgPurchaseForm openDeleteVgPurchaseModal={openDeletePurchaseModal} setOpenDeleteVgPurchaseModal={setOpenDeletePurchaseModal} purchase={purchase}/>
             </td>
             <td>{purchase.purchaseDate}</td>
             <td>{purchase.purchaseFrom}</td>
@@ -61,203 +75,5 @@ export default function PurchasesTable(props: { readonly purchases: VgPurchase[]
         </tbody>
       </table>
     </>
-  );
-};
-
-
-function EditPurchaseModal(props: {
-  readonly purchase: VgPurchase,
-  readonly openEditPurchaseModal: boolean,
-  readonly setOpenEditPurchaseModal: (openEditPurchaseModal: boolean) => void
-}) {
-  const {purchase, openEditPurchaseModal, setOpenEditPurchaseModal} = props;
-
-  return (
-    <dialog className="dialog-modal" open={openEditPurchaseModal} style={{width: '20%'}}>
-      <form>
-        <table>
-          <tbody>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"id"}>ID</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"id"}
-                id={"id"}
-                defaultValue={purchase.id ?? ''}
-                disabled={true}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"name"}>Name</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.name}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Purchase Date</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"date"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.purchaseDate ?? ''}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Purchase From</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"purchaseFrom"}
-                id={"purchaseFrom"}
-                defaultValue={purchase.purchaseFrom}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Base Cost</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"number"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.costBase}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Tax</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"number"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.costTax}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Shipping</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"number"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.costShipping}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>Other Fees</th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"number"}
-                name={"name"}
-                id={"name"}
-                defaultValue={purchase.costOther}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"costTotal"}>Total Cost</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"number"}
-                name={"costTotal"}
-                id={"costTotal"}
-                defaultValue={purchase.costTotal ?? 0.00}
-                disabled={true}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"notes"}>Notes</label>
-            </th>
-            <td>
-              <textarea
-                style={{width: "200%"}}
-                name={"notes"}
-                id={"notes"}
-                rows={10}
-                defaultValue={purchase.notes ?? ''}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"imageId"}>Image ID</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"imageId"}
-                id={"imageId"}
-                defaultValue={purchase.imageId ?? ''}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"consoleId"}>Console ID</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"consoleId"}
-                id={"consoleId"}
-                defaultValue={purchase.consoleId ?? ''}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope={"row"}>
-              <label htmlFor={"gameId"}>Game ID</label>
-            </th>
-            <td>
-              <input
-                style={{width: "200%"}}
-                type={"text"}
-                name={"gameId"}
-                id={"gameId"}
-                defaultValue={purchase.gameId ?? ''}
-              />
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </form>
-      <span>
-        <button onClick={() => {
-          alert("Edit purchase information not yet implemented")
-        }}>Save</button>
-        <button onClick={() => setOpenEditPurchaseModal(false)}>Close</button>
-      </span>
-    </dialog>
   );
 }

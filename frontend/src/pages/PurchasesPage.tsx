@@ -39,16 +39,14 @@ export default function PurchasesPage() {
       <div style={{ border: "3px solid red", margin: "2em" }}>
         <h1>Things I still need to do:</h1>
         <ul>
-          <li>Update PurchasesTable to show purchasedFrom field</li>
-          <li>Update NewVgPurchaseForm to include purchasedFrom field</li>
-          <li>Add edit purchase feature</li>
+          <li>Fix bug with edit and delete modals</li>
           <li>Add delete purchase feature</li>
           <li>Create ConsolesPage and all features</li>
           <li>Create GamesPage and all features</li>
         </ul>
       </div>
       <NewVgPurchaseForm/>
-      <PurchasesTable purchases={purchases}/>
+      <PurchasesTable purchases={purchases} setPurchases={setPurchases}/>
     </>
   );
 }

@@ -46,7 +46,12 @@ export default function NewVgGameForm(props: Readonly<NewVgGameFormProps>) {
       },
       body: JSON.stringify(vgGameForm)
     })
-      .then(res => res.json())
+      .then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw new Error(res.statusText);
+      })
       .then(data => {
         console.log(data)
         alert(`New game added: ${JSON.stringify(data)}`);

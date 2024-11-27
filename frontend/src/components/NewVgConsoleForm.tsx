@@ -44,7 +44,12 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
       },
       body: JSON.stringify(vgConsoleForm)
     })
-      .then(res => res.json())
+      .then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw new Error(res.statusText);
+      })
       .then(data => {
         console.log(data)
         alert(`New console added: ${JSON.stringify(data)}`)

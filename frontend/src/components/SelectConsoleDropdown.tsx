@@ -20,7 +20,7 @@ export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDrop
         if (res.ok) {
           return res.json()
         }
-        return undefined;
+        throw new Error(res.statusText);
       })
       .then((data) => {
         setVgConsoles(data)
