@@ -1,7 +1,7 @@
-import VgPurchase from "../models/VgPurchase.ts";
+import PurchaseModel from "../models/PurchaseModel.ts";
 
 interface VgPurchaseTableProps {
-  purchase: VgPurchase;
+  purchase: PurchaseModel;
   isReadOnly: boolean;
 }
 export default function VgPurchaseTable(props: Readonly<VgPurchaseTableProps>) {

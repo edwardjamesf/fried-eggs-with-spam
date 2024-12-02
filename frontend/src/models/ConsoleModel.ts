@@ -1,4 +1,4 @@
-export default interface VgConsole {
+export default interface ConsoleModel {
   id: string | undefined;
   name: string | undefined;
   manufacturer: string | undefined;
@@ -9,7 +9,7 @@ export default interface VgConsole {
   modifiedAt: string | undefined;
 }
 
-export const defaultVgConsole : VgConsole = {
+export const defaultConsoleModel: ConsoleModel = {
   id: undefined,
   name: undefined,
   manufacturer: undefined,
@@ -18,4 +18,4 @@ export const defaultVgConsole : VgConsole = {
   imageId: undefined,
   createdAt: undefined,
   modifiedAt: undefined,
-}
+};

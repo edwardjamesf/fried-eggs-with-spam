@@ -1,16 +1,18 @@
 import {Dispatch, FormEvent, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
-import {createVgConsole, getVgConsolesAll} from '../api/ConsoleApi.ts';
-import VgConsole from '../models/VgConsole.ts';
+import ConsoleModel from '../models/ConsoleModel.ts';
+import {createNewConsole} from '../api/ConsoleApi.ts';
 
-interface NewVgConsoleFormProps {
+interface NewConsoleFormProps {
   openForm: boolean;
   setOpenForm: Dispatch<SetStateAction<boolean>>;
+  dbConsoles: ConsoleModel[];
+  setDbConsoles: Dispatch<SetStateAction<ConsoleModel[]>>;
 }
 
-export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>) {
-  const {openForm, setOpenForm} = props;
+export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
+  const {openForm, setOpenForm, dbConsoles, setDbConsoles} = props;
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -19,25 +21,21 @@ export default function NewVgConsoleForm(props: Readonly<NewVgConsoleFormProps>)
   return (
     <Dialog
       open={openForm}
-      onClose={() => setOpenForm(false)}
+      onClose={handleCloseForm}
       PaperProps={{
         component: 'form',
         onSubmit: (event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
-          console.log(formJson);
-          createVgConsole(formJson as VgConsole).then((data) => {
-            console.log(data);
-          });
-          getVgConsolesAll().then((data) => {
-            console.log(data)
+          createNewConsole(formJson as ConsoleModel).then((data) => {
+            setDbConsoles([data, ...dbConsoles]);
           });
           handleCloseForm();
         }
       }}
     >
-      <DialogTitle>Update Console Data</DialogTitle>
+      <DialogTitle title={'New Console Data'}/>
       <DialogContent>
         <DialogContentText sx={{paddingBottom: '1em'}}>
           Define information for the new console here.

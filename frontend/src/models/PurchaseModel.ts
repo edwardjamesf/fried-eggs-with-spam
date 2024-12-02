@@ -1,4 +1,4 @@
-export default interface VgPurchase {
+export default interface PurchaseModel {
   id: string | undefined;
   name: string | undefined;
   purchaseDate: string | undefined;
@@ -15,3 +15,21 @@ export default interface VgPurchase {
   createdAt: string | undefined;
   modifiedAt: string | undefined;
 }
+
+export const defaultPurchaseModel: PurchaseModel = {
+  id: undefined,
+  name: undefined,
+  purchaseDate: undefined,
+  purchaseFrom: undefined,
+  costBase: undefined,
+  costTax: undefined,
+  costShipping: undefined,
+  costOther: undefined,
+  costTotal: undefined,
+  notes: undefined,
+  imageId: undefined,
+  consoleId: undefined,
+  gameId: undefined,
+  createdAt: undefined,
+  modifiedAt: undefined,
+};

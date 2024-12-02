@@ -1,31 +1,31 @@
-import ConsoleModel, {defaultConsoleModel} from '../models/ConsoleModel.ts';
+import PurchaseModel, {defaultPurchaseModel} from '../models/PurchaseModel.ts';
 import {handleError} from './ApiUtilities.ts';
 
-export async function createNewConsole(newConsole: ConsoleModel): Promise<ConsoleModel> {
+export async function createNewPurchase(newPurchase: PurchaseModel): Promise<PurchaseModel> {
   try {
-    const response = await fetch('api/consoles', {
+    const response = await fetch(`api/purchases`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newConsole)
+      body: JSON.stringify(newPurchase),
     });
 
     if (!response.ok) {
       console.error(response);
-      return defaultConsoleModel;
+      return defaultPurchaseModel;
     }
 
     return await response.json();
   } catch (error) {
     await handleError(error as Error);
-    return defaultConsoleModel;
+    return defaultPurchaseModel;
   }
 }
 
-export async function getConsolesFromDbAll(): Promise<ConsoleModel[]> {
+export async function getPurchasesFromDbAll(): Promise<PurchaseModel[]> {
   try {
-    const response = await fetch('api/consoles/all', {
+    const response = await fetch(`api/purchases/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -44,31 +44,31 @@ export async function getConsolesFromDbAll(): Promise<ConsoleModel[]> {
   }
 }
 
-export async function updateConsoleInDb(updateConsole: ConsoleModel): Promise<ConsoleModel> {
+export async function updatePurchaseInDb(updatePurchase: PurchaseModel): Promise<PurchaseModel> {
   try {
-    const response = await fetch(`api/consoles/${updateConsole.id}`, {
+    const response = await fetch(`api/purchases/${updatePurchase.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updateConsole)
+      body: JSON.stringify(updatePurchase),
     });
 
     if (!response.ok) {
       console.error(response);
-      return updateConsole;
+      return updatePurchase;
     }
 
     return await response.json();
   } catch (error) {
     await handleError(error as Error);
-    return updateConsole;
+    return updatePurchase;
   }
 }
 
-export async function deleteConsoleFromDb(deleteConsole: ConsoleModel): Promise<ConsoleModel> {
+export async function deletePurchaseFromDb(deletePurchase: PurchaseModel): Promise<PurchaseModel> {
   try {
-    const response = await fetch(`api/consoles/${deleteConsole.id}`, {
+    const response = await fetch(`api/purchases/${deletePurchase.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -77,12 +77,12 @@ export async function deleteConsoleFromDb(deleteConsole: ConsoleModel): Promise<
 
     if (!response.ok) {
       console.error(response);
-      return deleteConsole;
+      return deletePurchase;
     }
 
     return await response.json();
   } catch (error) {
     await handleError(error as Error);
-    return deleteConsole;
+    return deletePurchase;
   }
 }

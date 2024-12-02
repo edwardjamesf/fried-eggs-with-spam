@@ -1,12 +1,12 @@
 import {useEffect, useState} from 'react';
-import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import {getVgConsolesAll} from '../api/ConsoleApi.ts';
-import VgConsole from '../models/VgConsole.ts';
 import {Button, Paper} from '@mui/material';
-import UpdateVgConsoleForm from '../components/UpdateVgConsoleForm.tsx';
-import NewVgConsoleForm from '../components/NewVgConsoleForm.tsx';
+import {DataGrid, GridColDef} from '@mui/x-data-grid';
+import ConsoleModel from '../models/ConsoleModel.ts';
+import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
+import NewConsoleForm from '../components/NewConsoleForm.tsx';
+import UpdateConsoleForm from '../components/UpdateConsoleForm.tsx';
 
-const vgConsoleColumns: GridColDef[] = [
+const consoleColumns: GridColDef[] = [
   {field: 'manufacturer', headerName: 'Manufacturer'},
   {field: 'name', headerName: 'Console Name'},
   {field: 'releaseDate', headerName: 'Release Date'},
@@ -20,14 +20,14 @@ const autosizeOptions = {
 const paginationModel = {page: 0, pageSize: 10};
 
 export default function ConsolesPage() {
-  const [vgConsoles, setVgConsoles] = useState<VgConsole[]>([]);
-  const [vgConsole, setVgConsole] = useState<VgConsole>(vgConsoles[0]);
-  const [openNewVgConsoleForm, setOpenNewVgConsoleForm] = useState<boolean>(false);
-  const [openUpdateVgConsoleForm, setOpenUpdateVgConsoleForm] = useState<boolean>(false);
+  const [dbConsoles, setDbConsoles] = useState<ConsoleModel[]>([]);
+  const [selectedConsole, setSelectedConsole] = useState<ConsoleModel>(dbConsoles[0]);
+  const [openNewConsoleForm, setOpenNewConsoleForm] = useState<boolean>(false);
+  const [openUpdateConsoleForm, setOpenUpdateConsoleForm] = useState<boolean>(false);
 
   useEffect(() => {
-    getVgConsolesAll().then((data) => {
-      setVgConsoles(data);
+    getConsolesFromDbAll().then((data) => {
+      setDbConsoles(data);
     });
   }, []);
 
@@ -37,15 +37,15 @@ export default function ConsolesPage() {
         sx={{margin: '1em'}}
         variant={'contained'}
         onClick={() => {
-          setOpenNewVgConsoleForm(true);
+          setOpenNewConsoleForm(true);
         }}
       >
         Add Console
       </Button>
       <Paper>
         <DataGrid
-          rows={vgConsoles}
-          columns={vgConsoleColumns}
+          rows={dbConsoles}
+          columns={consoleColumns}
           initialState={{pagination: {paginationModel}}}
           pageSizeOptions={[10, 20, 50]}
           checkboxSelection={false}
@@ -53,19 +53,23 @@ export default function ConsolesPage() {
           autosizeOptions={autosizeOptions}
           density={'compact'}
           onCellClick={(params) => {
-            setVgConsole(params.row);
-            setOpenUpdateVgConsoleForm(true);
+            setSelectedConsole(params.row);
+            setOpenUpdateConsoleForm(true);
           }}
         />
       </Paper>
-      <UpdateVgConsoleForm
-        openForm={openUpdateVgConsoleForm}
-        setOpenForm={setOpenUpdateVgConsoleForm}
-        vgConsole={vgConsole}
+      <UpdateConsoleForm
+        openForm={openUpdateConsoleForm}
+        setOpenForm={setOpenUpdateConsoleForm}
+        selectedConsole={selectedConsole}
+        dbConsoles={dbConsoles}
+        setDbConsoles={setDbConsoles}
       />
-      <NewVgConsoleForm
-        openForm={openNewVgConsoleForm}
-        setOpenForm={setOpenNewVgConsoleForm}
+      <NewConsoleForm
+        openForm={openNewConsoleForm}
+        setOpenForm={setOpenNewConsoleForm}
+        dbConsoles={dbConsoles}
+        setDbConsoles={setDbConsoles}
       />
     </div>
   );

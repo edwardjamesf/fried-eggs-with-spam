@@ -1,18 +1,18 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import VgConsole from "../models/VgConsole.ts";
+import ConsoleModel from "../models/ConsoleModel.ts";
 
 /**
  * Interface for the Select Console dropdown menu
  */
 interface SelectConsoleDropdownProps {
-  setVgConsole: Dispatch<SetStateAction<VgConsole>>;
+  setVgConsole: Dispatch<SetStateAction<ConsoleModel>>;
   vgPurchaseForm: any;
   setVgPurchaseForm: Dispatch<SetStateAction<any>> | undefined;
 }
 
 export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDropdownProps>) {
   const {setVgConsole, vgPurchaseForm, setVgPurchaseForm} = props;
-  const [vgConsoles, setVgConsoles] = useState<VgConsole[] | undefined>(undefined);
+  const [vgConsoles, setVgConsoles] = useState<ConsoleModel[] | undefined>(undefined);
 
   useEffect(() => {
     fetch(`api/consoles/all`)
@@ -53,7 +53,7 @@ export default function SelectConsoleDropdown(props : Readonly<SelectConsoleDrop
       <label htmlFor={"vgConsole"}>Select Console: </label>
       <select name={"vgConsole"} id={"vgConsole"} onChange={handleChange}>
         <option value={""} defaultValue={"--"}>--</option>
-        {vgConsoles?.map((vgConsole: VgConsole)=> (
+        {vgConsoles?.map((vgConsole: ConsoleModel)=> (
           <option key={vgConsole.id} value={vgConsole.id}>{vgConsole.manufacturer + " " + vgConsole.name}</option>
         ))}
       </select>
