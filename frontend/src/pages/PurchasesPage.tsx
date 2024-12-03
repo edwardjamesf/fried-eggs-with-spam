@@ -15,7 +15,8 @@ const purchaseColumns: GridColDef[] = [
 ];
 
 const autosizeOptions = {
-  includeHeaders: true
+  includeHeaders: true,
+  includeOutliers: true,
 };
 
 const paginationModel = {page: 0, pageSize: 10};
@@ -25,15 +26,17 @@ export default function PurchasesPage() {
   const [selectedPurchase, setSelectedPurchase] = useState<PurchaseModel>(dbPurchases[0]);
   const [openNewPurchaseForm, setOpenNewPurchaseForm] = useState<boolean>(false);
   const [openUpdatePurchaseForm, setOpenUpdatePurchaseForm] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     getPurchasesFromDbAll().then((data) => {
       setDbPurchases(data);
+      setIsLoaded(true);
     });
   }, []);
 
   return (
-    <div style={{width: 960}}>
+    <div className={'main-table'}>
       <Button
         sx={{margin: '1em'}}
         variant={'contained'}
@@ -44,20 +47,22 @@ export default function PurchasesPage() {
         Add Purchase
       </Button>
       <Paper>
-        <DataGrid
-          rows={dbPurchases}
-          columns={purchaseColumns}
-          initialState={{pagination: {paginationModel}}}
-          pageSizeOptions={[10, 20, 50]}
-          checkboxSelection={false}
-          autosizeOnMount={true}
-          autosizeOptions={autosizeOptions}
-          density={'compact'}
-          onCellClick={(params) => {
-            setSelectedPurchase(params.row);
-            setOpenUpdatePurchaseForm(true);
-          }}
-        />
+        {isLoaded &&
+            <DataGrid
+                rows={dbPurchases}
+                columns={purchaseColumns}
+                initialState={{pagination: {paginationModel}}}
+                pageSizeOptions={[10, 20, 50]}
+                checkboxSelection={false}
+                autosizeOnMount={true}
+                autosizeOptions={autosizeOptions}
+                density={'compact'}
+                onCellClick={(params) => {
+                  setSelectedPurchase(params.row);
+                  setOpenUpdatePurchaseForm(true);
+                }}
+            />
+        }
       </Paper>
       <UpdatePurchaseForm
         openForm={openUpdatePurchaseForm}

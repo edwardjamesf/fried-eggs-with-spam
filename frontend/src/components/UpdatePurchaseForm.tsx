@@ -1,9 +1,15 @@
-import {Dispatch, FormEvent, SetStateAction} from 'react';
+import {Dispatch, FormEvent, SetStateAction, useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import ConsoleModel from '../models/ConsoleModel.ts';
+import GameModel from '../models/GameModel.ts';
 import PurchaseModel from '../models/PurchaseModel.ts';
+import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
+import {getGamesFromDbAll} from '../api/GameApi.ts';
 import {deletePurchaseFromDb, updatePurchaseInDb} from '../api/PurchaseApi.ts';
+import SelectConsoleMenu from './SelectConsoleMenu.tsx';
+import SelectGameMenu from './SelectGameMenu.tsx';
 
 interface UpdatePurchaseFormProps {
   openForm: boolean;
@@ -15,6 +21,9 @@ interface UpdatePurchaseFormProps {
 
 export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormProps>) {
   const {openForm, setOpenForm, selectedPurchase, dbPurchases, setDbPurchases} = props;
+
+  const [consoleChoices, setConsoleChoices] = useState<ConsoleModel[]>([]);
+  const [gameChoices, setGameChoices] = useState<GameModel[]>([]);
 
   const handleDeletePurchase = () => {
     deletePurchaseFromDb(selectedPurchase).then((data) => {
@@ -32,6 +41,18 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
   const handleCloseForm = () => {
     setOpenForm(false);
   };
+
+  useEffect(() => {
+    getConsolesFromDbAll()
+      .then((data) => {
+        setConsoleChoices(data);
+      });
+
+    getGamesFromDbAll()
+      .then((data) => {
+        setGameChoices(data);
+      });
+  }, []);
 
   return (
     <Dialog
@@ -56,7 +77,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
         }
       }}
     >
-      <DialogTitle title={'Update Purchase Data'}/>
+      <DialogTitle title={'Update Purchase Data'}>Update Purchase Data</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{paddingBottom: '1em'}}>
           Update information for purchase "{selectedPurchase?.name}" here.
@@ -65,7 +86,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           margin={'dense'}
           id={'id'}
           name={'id'}
-          label={'ID (read-only'}
+          label={'ID (read-only)'}
           type={'text'}
           fullWidth
           value={selectedPurchase?.id}
@@ -143,36 +164,8 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           fullWidth
           defaultValue={selectedPurchase?.notes}
         />
-        <TextField
-          margin={'dense'}
-          id={'imageId'}
-          name={'imageId'}
-          label={'Image (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
-        <TextField
-          margin={'dense'}
-          id={'consoleId'}
-          name={'consoleId'}
-          label={'Console (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
-        <TextField
-          margin={'dense'}
-          id={'gameId'}
-          name={'gameId'}
-          label={'Game (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
+        <SelectConsoleMenu dbConsoles={consoleChoices} selectedConsoleId={selectedPurchase?.consoleId}/>
+        <SelectGameMenu dbGames={gameChoices} selectedGameId={selectedPurchase?.gameId}/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>

@@ -31,6 +31,7 @@ public class ConsoleRepository {
                         .id((UUID) resultSet.getObject("id"))
                         .name(resultSet.getString("name"))
                         .manufacturer(resultSet.getString("manufacturer"))
+                        .region(resultSet.getString("region"))
                         .releaseDate(resultSet.getString("release_date"))
                         .description(resultSet.getString("description"))
                         .imageId((UUID) resultSet.getObject("image_id"))
@@ -46,12 +47,13 @@ public class ConsoleRepository {
 
     public List<Console> createConsole(ConsoleDto consoleDto) throws SQLException {
         try {
-            String sql = "select * from insert_console(?, ?, ?, ?, ?)";
+            String sql = "select * from insert_console(?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new ConsoleExtractor(),
                     consoleDto.getName(),
                     consoleDto.getManufacturer(),
+                    consoleDto.getRegion(),
                     consoleDto.getReleaseDate(),
                     consoleDto.getDescription(),
                     consoleDto.getImageId()
@@ -92,30 +94,16 @@ public class ConsoleRepository {
         }
     }
 
-    public List<Console> getConsolesLimit(int limit) throws SQLException {
-        try {
-            String sql = "select * from fetch_console_limit(?)";
-            return template.query(
-                    sql,
-                    new ConsoleExtractor(),
-                    limit
-            );
-        }catch (DataAccessException e) {
-            throw new SQLException("Internal Database Error: Fetch consoles query failed to execute: " + e.getMessage());
-        } catch (Exception e) {
-            throw new SQLException("Internal Database Error: Could not fetch console records: " + e.getMessage());
-        }
-    }
-
     public List<Console> updateConsole(UUID consoleId, ConsoleDto consoleDto) throws SQLException {
         try {
-            String sql = "select * from update_console(?, ?, ?, ?, ?, ?)";
+            String sql = "select * from update_console(?, ?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new ConsoleExtractor(),
                     consoleId,
                     consoleDto.getName(),
                     consoleDto.getManufacturer(),
+                    consoleDto.getRegion(),
                     consoleDto.getReleaseDate(),
                     consoleDto.getDescription(),
                     consoleDto.getImageId()

@@ -2,17 +2,20 @@ import {Dispatch, FormEvent, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
 import ConsoleModel from '../models/ConsoleModel.ts';
-import {createNewConsole} from '../api/ConsoleApi.ts';
+import GameModel from '../models/GameModel.ts';
+import {createNewGame} from '../api/GameApi.ts';
+import SelectConsoleMenu from './SelectConsoleMenu.tsx';
 
-interface NewConsoleFormProps {
+interface NewGameFormProps {
   openForm: boolean;
   setOpenForm: Dispatch<SetStateAction<boolean>>;
+  dbGames: GameModel[];
+  setDbGames: Dispatch<SetStateAction<GameModel[]>>;
   dbConsoles: ConsoleModel[];
-  setDbConsoles: Dispatch<SetStateAction<ConsoleModel[]>>;
 }
 
-export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
-  const {openForm, setOpenForm, dbConsoles, setDbConsoles} = props;
+export default function NewGameForm(props: Readonly<NewGameFormProps>) {
+  const {openForm, setOpenForm, dbGames, setDbGames, dbConsoles} = props;
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -28,35 +31,41 @@ export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
-          console.log(formJson as ConsoleModel);
-          createNewConsole(formJson as ConsoleModel).then((data) => {
-            console.log(data);
-            setDbConsoles([data, ...dbConsoles]);
+          createNewGame(formJson as GameModel).then((data) => {
+            setDbGames([data, ...dbGames]);
           });
           handleCloseForm();
         }
       }}
     >
-      <DialogTitle title={'New Console Data'}>New Console Data</DialogTitle>
+      <DialogTitle title={'New Game Data'}>New Game Data</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{paddingBottom: '1em'}}>
-          Define information for the new console here.
+          Define information for the new game here.
         </DialogContentText>
         <TextField
           autoFocus
-          margin={'dense'}
-          id={'manufacturer'}
-          name={'manufacturer'}
-          label={'Manufacturer'}
-          type={'text'}
-          fullWidth
-        />
-        <TextField
           required
           margin={'dense'}
           id={'name'}
           name={'name'}
           label={'Name'}
+          type={'text'}
+          fullWidth
+        />
+        <TextField
+          margin={'dense'}
+          id={'publisher'}
+          name={'publisher'}
+          label={'Publisher'}
+          type={'text'}
+          fullWidth
+        />
+        <TextField
+          margin={'dense'}
+          id={'developer'}
+          name={'developer'}
+          label={'Developer'}
           type={'text'}
           fullWidth
         />
@@ -83,6 +92,7 @@ export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
           rows={4}
           fullWidth
         />
+        <SelectConsoleMenu dbConsoles={dbConsoles} selectedConsoleId={undefined}/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>

@@ -18,6 +18,8 @@ public class ConsoleDto {
     private String name;
     @Schema(description = "Manufacturer of the console.", example = "Nintendo")
     private String manufacturer;
+    @Schema(description = "Region of the console.", example = "North America")
+    private String region;
     @Schema(description = "Release date of the console in YYYY-MM-DD format.", example = "1985-10-18")
     private String releaseDate;
     @Schema(description = "Descriptive text about the console.", example = "It's the NES.")

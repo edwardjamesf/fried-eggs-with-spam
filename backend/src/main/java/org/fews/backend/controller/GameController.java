@@ -59,12 +59,8 @@ public class GameController {
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"No games found in database\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve game records: [message]\"\n}")))
     })
-    public ResponseEntity<List<Game>> getGamesAll(@RequestParam(required = false) Integer limit) throws SQLException {
-        if (limit == null) {
-            return ResponseEntity.ok(gameService.getGamesAll());
-        } else {
-            return ResponseEntity.ok(gameService.getGamesLimit(limit));
-        }
+    public ResponseEntity<List<Game>> getGamesAll() throws SQLException {
+        return ResponseEntity.ok(gameService.getGamesAll());
     }
 
     @PutMapping(value = "/{gameId}", produces = "application/json")

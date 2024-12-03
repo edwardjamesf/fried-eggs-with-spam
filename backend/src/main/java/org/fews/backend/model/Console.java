@@ -12,6 +12,7 @@ public class Console {
     private UUID id;
     private String name;
     private String manufacturer;
+    private String region;
     private String releaseDate;
     private String description;
     private UUID imageId;

@@ -38,14 +38,6 @@ public class ConsoleService {
         return returnList;
     }
 
-    public List<Console> getConsolesLimit(int limit) throws SQLException {
-        List<Console> returnList = consoleRepository.getConsolesLimit(limit);
-        if (returnList.isEmpty()) {
-            throw new EntityNotFoundException("No consoles found in database");
-        }
-        return returnList;
-    }
-
     public Console updateConsole(UUID consoleId, ConsoleDto consoleDto) throws SQLException {
         return consoleRepository.updateConsole(consoleId, consoleDto).getFirst();
     }

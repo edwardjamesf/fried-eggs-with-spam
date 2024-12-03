@@ -38,14 +38,6 @@ public class GameService {
         return returnList;
     }
 
-    public List<Game> getGamesLimit(int limit) throws SQLException {
-        List<Game> returnList = gameRepository.getGamesLimit(limit);
-        if (returnList.isEmpty()) {
-            throw new EntityNotFoundException("No games found in database");
-        }
-        return returnList;
-    }
-
     public Game updateGame(UUID gameId, GameDto gameDto) throws SQLException {
         return gameRepository.updateGame(gameId, gameDto).getFirst();
     }

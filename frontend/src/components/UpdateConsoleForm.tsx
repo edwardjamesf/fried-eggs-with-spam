@@ -18,7 +18,13 @@ export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps
 
   const handleDeleteConsole = () => {
     deleteConsoleFromDb(selectedConsole).then((data) => {
-      console.log(data);
+      const temp = [...dbConsoles];
+      const dbConsoleIds = temp.map(dbConsole => dbConsole.id);
+      const indRemove = dbConsoleIds.indexOf(data.id);
+      if (indRemove > -1) {
+        temp.splice(indRemove, 1);
+      }
+      setDbConsoles([...temp]);
       setOpenForm(false);
     });
   };
@@ -50,7 +56,7 @@ export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps
         }
       }}
     >
-      <DialogTitle title={'Update Console Data'}/>
+      <DialogTitle title={'Update Console Data'}>Update Console Data</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{paddingBottom: '1em'}}>
           Update information for the {selectedConsole?.manufacturer} {selectedConsole?.name} here.
@@ -59,7 +65,7 @@ export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps
           margin={'dense'}
           id={'id'}
           name={'id'}
-          label={'ID (read-only'}
+          label={'ID (read-only)'}
           type={'text'}
           fullWidth
           value={selectedConsole?.id}
@@ -84,6 +90,15 @@ export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps
           fullWidth
           defaultValue={selectedConsole?.name}
         />
+        <TextField
+          margin={'dense'}
+          id={'region'}
+          name={'region'}
+          label={'Region'}
+          type={'text'}
+          fullWidth
+          defaultValue={selectedConsole?.region}
+        />
         <DatePicker
           sx={{marginTop: '1em', marginBottom: '1em', width: '100%'}}
           label={'Release Date'}
@@ -100,16 +115,6 @@ export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps
           rows={4}
           fullWidth
           defaultValue={selectedConsole?.description}
-        />
-        <TextField
-          margin={'dense'}
-          id={'imageId'}
-          name={'imageId'}
-          label={'Image (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
         />
       </DialogContent>
       <DialogActions>

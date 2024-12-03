@@ -63,3 +63,25 @@ button {
 .table-data {
   width: 100%;
 }
+
+.drop-down {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.main-table {
+  position: absolute;
+  top: 25%;
+  transform: translate(-50%, -50%);
+  width: 75vw;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+}
+
+.navbar-buttons {
+  color: #FDB927;
+}

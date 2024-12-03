@@ -20,6 +20,8 @@ public class GameDto {
     private String developer;
     @Schema(description = "Publisher of the game.", example = "Nintendo")
     private String publisher;
+    @Schema(description = "Region of the game.", example = "North America")
+    private String region;
     @Schema(description = "Release date of the game in YYYY-MM-DD format.", example = "1990-02-12")
     private String releaseDate;
     @Schema(description = "Descriptive text about the game.", example = "It's Super Mario Bros 3 for the NES.")

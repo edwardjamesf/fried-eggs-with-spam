@@ -38,6 +38,7 @@ create table consoles(
     id uuid default gen_random_uuid(),
     name text not null,
     manufacturer text,
+    region text,
     release_date text,
     description text,
     image_id uuid,
@@ -58,6 +59,7 @@ create table games(
     name text not null,
     developer text,
     publisher text,
+    region text,
     release_date text,
     description text,
     image_id uuid,
@@ -139,6 +141,7 @@ $$ language plpgsql;
 create or replace function insert_console(
     name_in text,
     manufacturer_in text,
+    region_in text,
     release_date_in text,
     description_in text,
     image_id_in uuid
@@ -149,12 +152,14 @@ begin
         insert into consoles(
             name,
             manufacturer,
+            region,
             release_date,
             description,
             image_id
         ) values (
             name_in,
             manufacturer_in,
+            region_in,
             release_date_in,
             description_in,
             image_id_in
@@ -170,6 +175,7 @@ create or replace function insert_game(
     name_in text,
     developer_in text,
     publisher_in text,
+    region_in text,
     release_date_in text,
     description_in text,
     image_id_in uuid,
@@ -182,6 +188,7 @@ begin
             name,
             developer,
             publisher,
+            region,
             release_date,
             description,
             image_id,
@@ -190,6 +197,7 @@ begin
             name_in,
             developer_in,
             publisher_in,
+            region_in,
             release_date_in,
             description_in,
             image_id_in,
@@ -413,6 +421,7 @@ create or replace function update_console(
     id_in uuid,
     name_in text,
     manufacturer_in text,
+    region_in text,
     release_date_in text,
     description_in text,
     image_id_in uuid
@@ -423,6 +432,7 @@ begin
         update consoles set
             name = name_in,
             manufacturer = manufacturer_in,
+            region = region_in,
             release_date = release_date_in,
             description = description_in,
             image_id = image_id_in,
@@ -441,6 +451,7 @@ create or replace function update_game(
     name_in text,
     developer_in text,
     publisher_in text,
+    region_in text,
     release_date_in text,
     description_in text,
     image_id_in uuid,
@@ -453,6 +464,7 @@ begin
             name = name_in,
             developer = developer_in,
             publisher = publisher_in,
+            region = region_in,
             release_date = release_date_in,
             description = description_in,
             image_id = image_id_in,
@@ -572,8 +584,8 @@ declare
     purchase_key uuid;
 begin
     select id into image_key from insert_image('test', null, null);
-    select id into console_key from insert_console('test', null, null, null, null);
-    select id into game_key from insert_game('test', null, null, null, null, null, null);
+    select id into console_key from insert_console('test', null, null, null, null, null);
+    select id into game_key from insert_game('test', null, null, null, null, null, null, null);
     select id into purchase_key from insert_purchase('test', null, 0.0, 1.0, 2.0, 3.0, null, null, null, null, null);
 
     perform fetch_image(image_key);
@@ -582,8 +594,8 @@ begin
     perform fetch_purchase(purchase_key);
 
     perform update_image(image_key, 'test', 'description', 'path');
-    perform update_console(console_key, 'test', 'manufacturer', 'release_date', 'description', null);
-    perform update_game(game_key, 'test', 'developer', 'publisher', 'release_date', 'description', image_key, console_key);
+    perform update_console(console_key, 'test', 'manufacturer', 'region', 'release_date', 'description', null);
+    perform update_game(game_key, 'test', 'developer', 'publisher', 'region', 'release_date', 'description', image_key, console_key);
     perform update_purchase(purchase_key, 'test', 'purchase_date', 10.11, 20.22, 30.33, 40.44, 'purchase_from', 'notes', image_key, console_key, game_key);
 
     perform delete_image(image_key);

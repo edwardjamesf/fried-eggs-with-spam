@@ -13,6 +13,7 @@ public class Game {
     private String name;
     private String developer;
     private String publisher;
+    private String region;
     private String releaseDate;
     private String description;
     private UUID imageId;

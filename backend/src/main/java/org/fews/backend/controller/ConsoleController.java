@@ -59,12 +59,8 @@ public class ConsoleController {
             @ApiResponse(responseCode = "404", description = "Entity Not Found", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"No consoles found in database\"\n}"))),
             @ApiResponse(responseCode = "500", description = "Internal Database Error", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\n  \"message\": \"Internal Database Error: Could not retrieve console records: [message]\"\n}")))
     })
-    public ResponseEntity<List<Console>> getConsolesAll(@RequestParam(required = false) Integer limit) throws SQLException {
-        if (limit == null) {
-            return ResponseEntity.ok(consoleService.getConsolesAll());
-        } else {
-            return ResponseEntity.ok(consoleService.getConsolesLimit(limit));
-        }
+    public ResponseEntity<List<Console>> getConsolesAll() throws SQLException {
+        return ResponseEntity.ok(consoleService.getConsolesAll());
     }
 
     @PutMapping(value = "/{consoleId}", produces = "application/json")

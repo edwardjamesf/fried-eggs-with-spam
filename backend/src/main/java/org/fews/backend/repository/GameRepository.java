@@ -32,6 +32,7 @@ public class GameRepository {
                         .name(resultSet.getString("name"))
                         .developer(resultSet.getString("developer"))
                         .publisher(resultSet.getString("publisher"))
+                        .region(resultSet.getString("region"))
                         .releaseDate(resultSet.getString("release_date"))
                         .description(resultSet.getString("description"))
                         .imageId((UUID) resultSet.getObject("image_id"))
@@ -48,13 +49,14 @@ public class GameRepository {
 
     public List<Game> createGame(GameDto gameDto) throws SQLException {
         try {
-            String sql = "select * from insert_game(?, ?, ?, ?, ?, ?, ?)";
+            String sql = "select * from insert_game(?, ?, ?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new GameExtractor(),
                     gameDto.getName(),
                     gameDto.getDeveloper(),
                     gameDto.getPublisher(),
+                    gameDto.getRegion(),
                     gameDto.getReleaseDate(),
                     gameDto.getDescription(),
                     gameDto.getImageId(),
@@ -96,24 +98,9 @@ public class GameRepository {
         }
     }
 
-    public List<Game> getGamesLimit(int limit) throws SQLException {
-        try {
-            String sql = "select * from fetch_game_limit(?)";
-            return template.query(
-                    sql,
-                    new GameExtractor(),
-                    limit
-            );
-        }catch (DataAccessException e) {
-            throw new SQLException("Internal Database Error: Fetch games query failed to execute: " + e.getMessage());
-        } catch (Exception e) {
-            throw new SQLException("Internal Database Error: Could not fetch game records: " + e.getMessage());
-        }
-    }
-
     public List<Game> updateGame(UUID gameId, GameDto gameDto) throws SQLException {
         try {
-            String sql = "select * from update_game(?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "select * from update_game(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             return template.query(
                     sql,
                     new GameExtractor(),
@@ -121,6 +108,7 @@ public class GameRepository {
                     gameDto.getName(),
                     gameDto.getDeveloper(),
                     gameDto.getPublisher(),
+                    gameDto.getRegion(),
                     gameDto.getReleaseDate(),
                     gameDto.getDescription(),
                     gameDto.getImageId(),

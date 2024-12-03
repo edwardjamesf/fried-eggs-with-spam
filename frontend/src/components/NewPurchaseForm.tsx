@@ -1,9 +1,15 @@
-import {Dispatch, FormEvent, SetStateAction} from 'react';
-import PurchaseModel from '../models/PurchaseModel.ts';
+import {Dispatch, FormEvent, SetStateAction, useEffect, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
-import {createNewPurchase} from '../api/PurchaseApi.ts';
 import {DatePicker} from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import ConsoleModel from '../models/ConsoleModel.ts';
+import GameModel from '../models/GameModel.ts';
+import PurchaseModel from '../models/PurchaseModel.ts';
+import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
+import {getGamesFromDbAll} from '../api/GameApi.ts';
+import {createNewPurchase} from '../api/PurchaseApi.ts';
+import SelectConsoleMenu from './SelectConsoleMenu.tsx';
+import SelectGameMenu from './SelectGameMenu.tsx';
 
 interface NewPurchaseFormProps {
   openForm: boolean;
@@ -15,9 +21,29 @@ interface NewPurchaseFormProps {
 export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
   const {openForm, setOpenForm, dbPurchases, setDbPurchases} = props;
 
+  const [consoleChoices, setConsoleChoices] = useState<ConsoleModel[]>([]);
+  const [gameChoices, setGameChoices] = useState<GameModel[]>([]);
+
+  const inputProps = {
+    min: 0,
+    step: 0.01,
+  }
+
   const handleCloseForm = () => {
     setOpenForm(false);
   };
+
+  useEffect(() => {
+    getConsolesFromDbAll()
+      .then((data) => {
+        setConsoleChoices(data);
+      });
+
+    getGamesFromDbAll()
+      .then((data) => {
+        setGameChoices(data);
+      });
+  }, []);
 
   return (
     <Dialog
@@ -29,6 +55,9 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
+          if (formJson.consoleId === '') {
+            formJson.consoleId = undefined;
+          }
           createNewPurchase(formJson as PurchaseModel).then((data) => {
             setDbPurchases([data, ...dbPurchases]);
           });
@@ -36,7 +65,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
         }
       }}
     >
-      <DialogTitle title={'New Purchase Data'}/>
+      <DialogTitle title={'New Purchase Data'}>New Purchase Data</DialogTitle>
       <DialogContent>
         <DialogContent sx={{paddingBottom: '1em'}}>
           Define information for the new purchase here.
@@ -71,6 +100,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           name={'costBase'}
           label={'Base Cost'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={0.00}
         />
@@ -80,6 +110,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           name={'costTax'}
           label={'Tax'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={0.00}
         />
@@ -89,6 +120,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           name={'costShipping'}
           label={'Shipping'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={0.00}
         />
@@ -98,6 +130,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           name={'costOther'}
           label={'Misc. Fees / Other Costs'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={0.00}
         />
@@ -111,36 +144,8 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           rows={4}
           fullWidth
         />
-        <TextField
-          margin={'dense'}
-          id={'imageId'}
-          name={'imageId'}
-          label={'Image (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
-        <TextField
-          margin={'dense'}
-          id={'consoleId'}
-          name={'consoleId'}
-          label={'Console (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
-        <TextField
-          margin={'dense'}
-          id={'gameId'}
-          name={'gameId'}
-          label={'Game (Under Construction)'}
-          type={'text'}
-          fullWidth
-          defaultValue={undefined}
-          disabled={true}
-        />
+        <SelectConsoleMenu dbConsoles={consoleChoices} selectedConsoleId={undefined}/>
+        <SelectGameMenu dbGames={gameChoices} selectedGameId={undefined}/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>

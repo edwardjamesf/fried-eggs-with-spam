@@ -9,13 +9,10 @@ import UpdateConsoleForm from '../components/UpdateConsoleForm.tsx';
 const consoleColumns: GridColDef[] = [
   {field: 'manufacturer', headerName: 'Manufacturer'},
   {field: 'name', headerName: 'Console Name'},
+  {field: 'region', headerName: 'Region'},
   {field: 'releaseDate', headerName: 'Release Date'},
   {field: 'description', headerName: 'Description', flex: 1},
 ];
-
-const autosizeOptions = {
-  includeHeaders: true
-};
 
 const paginationModel = {page: 0, pageSize: 10};
 
@@ -24,15 +21,17 @@ export default function ConsolesPage() {
   const [selectedConsole, setSelectedConsole] = useState<ConsoleModel>(dbConsoles[0]);
   const [openNewConsoleForm, setOpenNewConsoleForm] = useState<boolean>(false);
   const [openUpdateConsoleForm, setOpenUpdateConsoleForm] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     getConsolesFromDbAll().then((data) => {
       setDbConsoles(data);
+      setIsLoaded(true);
     });
   }, []);
 
   return (
-    <div style={{width: 960}}>
+    <div className={'main-table'}>
       <Button
         sx={{margin: '1em'}}
         variant={'contained'}
@@ -43,20 +42,21 @@ export default function ConsolesPage() {
         Add Console
       </Button>
       <Paper>
-        <DataGrid
-          rows={dbConsoles}
-          columns={consoleColumns}
-          initialState={{pagination: {paginationModel}}}
-          pageSizeOptions={[10, 20, 50]}
-          checkboxSelection={false}
-          autosizeOnMount={true}
-          autosizeOptions={autosizeOptions}
-          density={'compact'}
-          onCellClick={(params) => {
-            setSelectedConsole(params.row);
-            setOpenUpdateConsoleForm(true);
-          }}
-        />
+        {isLoaded &&
+            <DataGrid
+                rows={dbConsoles}
+                columns={consoleColumns}
+                initialState={{pagination: {paginationModel}}}
+                pageSizeOptions={[10, 20, 50]}
+                checkboxSelection={false}
+                autosizeOnMount={true}
+                density={'compact'}
+                onCellClick={(params) => {
+                  setSelectedConsole(params.row);
+                  setOpenUpdateConsoleForm(true);
+                }}
+            />
+        }
       </Paper>
       <UpdateConsoleForm
         openForm={openUpdateConsoleForm}
