@@ -144,8 +144,17 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           rows={4}
           fullWidth
         />
-        <SelectConsoleMenu dbConsoles={consoleChoices} selectedConsoleId={undefined}/>
-        <SelectGameMenu dbGames={gameChoices} selectedGameId={undefined}/>
+        <SelectConsoleMenu
+          dbConsoles={consoleChoices}
+          setDbConsoles={setConsoleChoices}
+          selectedConsoleId={undefined}
+        />
+        <SelectGameMenu
+          dbGames={gameChoices}
+          setDbGames={setGameChoices}
+          selectedGameId={undefined}
+          dbConsoles={consoleChoices}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>
