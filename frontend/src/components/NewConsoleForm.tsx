@@ -28,9 +28,7 @@ export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
-          console.log(formJson as ConsoleModel);
           createNewConsole(formJson as ConsoleModel).then((data) => {
-            console.log(data);
             setDbConsoles([data, ...dbConsoles]);
           });
           handleCloseForm();

@@ -5,6 +5,10 @@ import PurchaseModel from '../models/PurchaseModel.ts';
 import {getPurchasesFromDbAll} from '../api/PurchaseApi.ts';
 import NewPurchaseForm from '../components/NewPurchaseForm.tsx';
 import UpdatePurchaseForm from '../components/UpdatePurchaseForm.tsx';
+import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
+import ConsoleModel from '../models/ConsoleModel.ts';
+import GameModel from '../models/GameModel.ts';
+import {getGamesFromDbAll} from '../api/GameApi.ts';
 
 const purchaseColumns: GridColDef[] = [
   {field: 'name', headerName: 'Name'},
@@ -19,9 +23,11 @@ const autosizeOptions = {
   includeOutliers: true,
 };
 
-const paginationModel = {page: 0, pageSize: 10};
+const paginationModel = {page: 0, pageSize: 20};
 
 export default function PurchasesPage() {
+  const [dbConsoles, setDbConsoles] = useState<ConsoleModel[]>([]);
+  const [dbGames, setDbGames] = useState<GameModel[]>([]);
   const [dbPurchases, setDbPurchases] = useState<PurchaseModel[]>([]);
   const [selectedPurchase, setSelectedPurchase] = useState<PurchaseModel>(dbPurchases[0]);
   const [openNewPurchaseForm, setOpenNewPurchaseForm] = useState<boolean>(false);
@@ -29,6 +35,14 @@ export default function PurchasesPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    getConsolesFromDbAll().then((data) => {
+      setDbConsoles(data);
+    });
+
+    getGamesFromDbAll().then((data) => {
+      setDbGames(data);
+    });
+
     getPurchasesFromDbAll().then((data) => {
       setDbPurchases(data);
       setIsLoaded(true);
@@ -36,7 +50,7 @@ export default function PurchasesPage() {
   }, []);
 
   return (
-    <div className={'main-table'}>
+    <div className={'page-div'}>
       <Button
         sx={{margin: '1em'}}
         variant={'contained'}
@@ -46,6 +60,7 @@ export default function PurchasesPage() {
       >
         Add Purchase
       </Button>
+
       <Paper>
         {isLoaded &&
             <DataGrid
@@ -64,16 +79,24 @@ export default function PurchasesPage() {
             />
         }
       </Paper>
-      <UpdatePurchaseForm
-        openForm={openUpdatePurchaseForm}
-        setOpenForm={setOpenUpdatePurchaseForm}
-        selectedPurchase={selectedPurchase}
+
+      <NewPurchaseForm
+        openNewPurchaseForm={openNewPurchaseForm}
+        setOpenNewPurchaseForm={setOpenNewPurchaseForm}
+        dbConsoles={dbConsoles}
+        setDbConsoles={setDbConsoles}
+        dbGames={dbGames}
+        setDbGames={setDbGames}
         dbPurchases={dbPurchases}
         setDbPurchases={setDbPurchases}
       />
-      <NewPurchaseForm
-        openForm={openNewPurchaseForm}
-        setOpenForm={setOpenNewPurchaseForm}
+
+      <UpdatePurchaseForm
+        openUpdatePurchaseForm={openUpdatePurchaseForm}
+        setOpenUpdatePurchaseForm={setOpenUpdatePurchaseForm}
+        dbConsoles={dbConsoles}
+        dbGames={dbGames}
+        selectedPurchase={selectedPurchase}
         dbPurchases={dbPurchases}
         setDbPurchases={setDbPurchases}
       />

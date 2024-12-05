@@ -1,29 +1,43 @@
-import {Dispatch, FormEvent, SetStateAction, useEffect, useState} from 'react';
+import {Dispatch, FormEvent, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import ConsoleModel from '../models/ConsoleModel.ts';
 import GameModel from '../models/GameModel.ts';
 import PurchaseModel from '../models/PurchaseModel.ts';
-import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
-import {getGamesFromDbAll} from '../api/GameApi.ts';
 import {deletePurchaseFromDb, updatePurchaseInDb} from '../api/PurchaseApi.ts';
 import SelectConsoleMenu from './SelectConsoleMenu.tsx';
 import SelectGameMenu from './SelectGameMenu.tsx';
 
 interface UpdatePurchaseFormProps {
-  openForm: boolean;
-  setOpenForm: Dispatch<SetStateAction<boolean>>;
+  openUpdatePurchaseForm: boolean;
+  setOpenUpdatePurchaseForm: Dispatch<SetStateAction<boolean>>;
+  dbConsoles: ConsoleModel[];
+  dbGames: GameModel[];
   selectedPurchase: PurchaseModel;
   dbPurchases: PurchaseModel[];
   setDbPurchases: Dispatch<SetStateAction<PurchaseModel[]>>;
 }
 
 export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormProps>) {
-  const {openForm, setOpenForm, selectedPurchase, dbPurchases, setDbPurchases} = props;
+  const {
+    openUpdatePurchaseForm,
+    setOpenUpdatePurchaseForm,
+    dbConsoles,
+    dbGames,
+    selectedPurchase,
+    dbPurchases,
+    setDbPurchases
+  } = props;
 
-  const [consoleChoices, setConsoleChoices] = useState<ConsoleModel[]>([]);
-  const [gameChoices, setGameChoices] = useState<GameModel[]>([]);
+  const inputProps = {
+    min: 0,
+    step: 0.01,
+  };
+
+  const handleCloseUpdateForm = () => {
+    setOpenUpdatePurchaseForm(false);
+  };
 
   const handleDeletePurchase = () => {
     deletePurchaseFromDb(selectedPurchase).then((data) => {
@@ -34,30 +48,14 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
         temp.splice(indRemove, 1);
       }
       setDbPurchases([...temp]);
-      setOpenForm(false);
+      setOpenUpdatePurchaseForm(false);
     });
   };
 
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
-
-  useEffect(() => {
-    getConsolesFromDbAll()
-      .then((data) => {
-        setConsoleChoices(data);
-      });
-
-    getGamesFromDbAll()
-      .then((data) => {
-        setGameChoices(data);
-      });
-  }, []);
-
   return (
     <Dialog
-      open={openForm}
-      onClose={handleCloseForm}
+      open={openUpdatePurchaseForm}
+      onClose={handleCloseUpdateForm}
       PaperProps={{
         component: 'form',
         onSubmit: (event: FormEvent<HTMLFormElement>) => {
@@ -73,7 +71,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
             }
             setDbPurchases([data, ...temp]);
           });
-          handleCloseForm();
+          handleCloseUpdateForm();
         }
       }}
     >
@@ -123,6 +121,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           name={'costBase'}
           label={'Base Cost'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={selectedPurchase?.costBase}
         />
@@ -132,6 +131,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           name={'costTax'}
           label={'Tax'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={selectedPurchase?.costTax}
         />
@@ -141,6 +141,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           name={'costShipping'}
           label={'Shipping'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={selectedPurchase?.costShipping}
         />
@@ -150,6 +151,7 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           name={'costOther'}
           label={'Misc. Fees / Other Costs'}
           type={'number'}
+          inputProps={inputProps}
           fullWidth
           defaultValue={selectedPurchase?.costOther}
         />
@@ -164,11 +166,17 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           fullWidth
           defaultValue={selectedPurchase?.notes}
         />
-        <SelectConsoleMenu dbConsoles={consoleChoices} selectedConsoleId={selectedPurchase?.consoleId}/>
-        <SelectGameMenu dbGames={gameChoices} selectedGameId={selectedPurchase?.gameId}/>
+        <SelectConsoleMenu
+          dbConsoles={dbConsoles}
+          selectedConsoleId={selectedPurchase?.consoleId}
+        />
+        <SelectGameMenu
+          dbGames={dbGames}
+          selectedGameId={selectedPurchase?.gameId}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseForm}>Cancel</Button>
+        <Button onClick={handleCloseUpdateForm}>Cancel</Button>
         <Button variant={'contained'} color={'error'} onClick={handleDeletePurchase}>Delete</Button>
         <Button type={'submit'} variant={'contained'}>Update</Button>
       </DialogActions>

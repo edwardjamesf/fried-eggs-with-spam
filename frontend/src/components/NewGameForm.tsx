@@ -9,13 +9,21 @@ import SelectConsoleMenu from './SelectConsoleMenu.tsx';
 interface NewGameFormProps {
   openForm: boolean;
   setOpenForm: Dispatch<SetStateAction<boolean>>;
+  dbConsoles: ConsoleModel[];
   dbGames: GameModel[];
   setDbGames: Dispatch<SetStateAction<GameModel[]>>;
-  dbConsoles: ConsoleModel[];
+  setSelectedGameId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export default function NewGameForm(props: Readonly<NewGameFormProps>) {
-  const {openForm, setOpenForm, dbGames, setDbGames, dbConsoles} = props;
+  const {
+    openForm,
+    setOpenForm,
+    dbConsoles,
+    dbGames,
+    setDbGames,
+    setSelectedGameId
+  } = props;
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -32,6 +40,7 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries((formData as any).entries());
           createNewGame(formJson as GameModel).then((data) => {
+            setSelectedGameId(data.id);
             setDbGames([data, ...dbGames]);
           });
           handleCloseForm();
@@ -92,7 +101,10 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
           rows={4}
           fullWidth
         />
-        <SelectConsoleMenu dbConsoles={dbConsoles} selectedConsoleId={undefined}/>
+        <SelectConsoleMenu
+          dbConsoles={dbConsoles}
+          selectedConsoleId={undefined}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseForm}>Cancel</Button>
