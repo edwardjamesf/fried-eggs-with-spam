@@ -1,23 +1,23 @@
-import {FormControl, InputLabel, MenuItem, Select} from '@mui/material';
-import GameModel from '../models/GameModel.ts';
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material';
+import GameModel, {defaultGameModel} from '../models/GameModel.ts';
+import {Dispatch, SetStateAction} from 'react';
 
 interface SelectGameMenuProps {
   dbGames: GameModel[];
-  selectedGameId: string | undefined;
+  selectedGame: GameModel;
+  setSelectedGame: Dispatch<SetStateAction<GameModel>>;
 }
 
 export default function SelectGameMenu(props: Readonly<SelectGameMenuProps>) {
-  const {dbGames, selectedGameId} = props;
+  const {dbGames, selectedGame, setSelectedGame} = props;
 
-  const getGameName = () => {
-    if (selectedGameId) {
-      const gameIds = dbGames.map((dbGame) => dbGame.id);
-      const indGameId = gameIds.indexOf(selectedGameId);
-      if (indGameId !== -1) {
-        return gameIds[indGameId];
-      }
+  const handleChange = (event: SelectChangeEvent) => {
+    const chosenGame = dbGames.find((dbGame) => dbGame.id === event.target.value);
+    if (chosenGame) {
+      setSelectedGame(chosenGame);
+    } else {
+      setSelectedGame(defaultGameModel);
     }
-    return '';
   };
 
   return (
@@ -29,7 +29,8 @@ export default function SelectGameMenu(props: Readonly<SelectGameMenuProps>) {
         id={'gameId'}
         name={'gameId'}
         labelId={'gameId'}
-        defaultValue={getGameName}
+        value={selectedGame.id}
+        onChange={handleChange}
       >
         <MenuItem value={''}>None</MenuItem>
         {dbGames.map((item) => (
@@ -42,6 +43,5 @@ export default function SelectGameMenu(props: Readonly<SelectGameMenuProps>) {
         ))}
       </Select>
     </FormControl>
-
   );
 }

@@ -2,8 +2,8 @@ import {Dispatch, FormEvent, SetStateAction, useState} from 'react';
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import ConsoleModel from '../models/ConsoleModel.ts';
-import GameModel from '../models/GameModel.ts';
+import ConsoleModel, {defaultConsoleModel} from '../models/ConsoleModel.ts';
+import GameModel, {defaultGameModel} from '../models/GameModel.ts';
 import PurchaseModel from '../models/PurchaseModel.ts';
 import {createNewPurchase} from '../api/PurchaseApi.ts';
 import SelectConsoleMenu from './SelectConsoleMenu.tsx';
@@ -20,6 +20,10 @@ interface NewPurchaseFormProps {
   setDbGames: Dispatch<SetStateAction<GameModel[]>>;
   dbPurchases: PurchaseModel[];
   setDbPurchases: Dispatch<SetStateAction<PurchaseModel[]>>;
+  selectedConsole: ConsoleModel;
+  setSelectedConsole: Dispatch<SetStateAction<ConsoleModel>>;
+  selectedGame: GameModel;
+  setSelectedGame: Dispatch<SetStateAction<GameModel>>;
 }
 
 export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
@@ -31,12 +35,15 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
     dbGames,
     setDbGames,
     dbPurchases,
-    setDbPurchases
+    setDbPurchases,
+    selectedConsole,
+    setSelectedConsole,
+    selectedGame,
+    setSelectedGame,
   } = props;
 
   const [openNewConsoleForm, setOpenNewConsoleForm] = useState(false);
   const [openNewGameForm, setOpenNewGameForm] = useState(false);
-  const [selectedGameId, setSelectedGameId] = useState<string | undefined>(undefined);
 
   const inputProps = {
     min: 0,
@@ -63,6 +70,8 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
             }
             createNewPurchase(formJson as PurchaseModel).then((data) => {
               setDbPurchases([data, ...dbPurchases]);
+              setSelectedConsole(defaultConsoleModel);
+              setSelectedGame(defaultGameModel);
             });
             handleCloseNewPurchaseForm();
           }
@@ -151,26 +160,32 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
             <Button
               sx={{marginRight: '1em', width: '40%'}}
               variant={'contained'}
-              onClick={() => {setOpenNewConsoleForm(true)}}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
             >
               New Console
             </Button>
             <SelectConsoleMenu
               dbConsoles={dbConsoles}
-              selectedConsoleId={undefined}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
             />
           </Box>
           <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
             <Button
               sx={{marginRight: '1em', width: '40%'}}
               variant={'contained'}
-              onClick={() => {setOpenNewGameForm(true)}}
+              onClick={() => {
+                setOpenNewGameForm(true);
+              }}
             >
               New Game
             </Button>
             <SelectGameMenu
               dbGames={dbGames}
-              selectedGameId={selectedGameId}
+              selectedGame={selectedGame}
+              setSelectedGame={setSelectedGame}
             />
           </Box>
         </DialogContent>
@@ -185,6 +200,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
         setOpenForm={setOpenNewConsoleForm}
         dbConsoles={dbConsoles}
         setDbConsoles={setDbConsoles}
+        setSelectedConsole={setSelectedConsole}
       />
 
       <NewGameForm
@@ -193,7 +209,9 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
         dbConsoles={dbConsoles}
         dbGames={dbGames}
         setDbGames={setDbGames}
-        setSelectedGameId={setSelectedGameId}
+        selectedConsole={selectedConsole}
+        setSelectedConsole={setSelectedConsole}
+        setSelectedGame={setSelectedGame}
       />
     </>
   );

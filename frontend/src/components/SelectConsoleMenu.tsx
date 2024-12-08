@@ -1,23 +1,23 @@
-import {FormControl, InputLabel, MenuItem, Select} from '@mui/material';
-import ConsoleModel from '../models/ConsoleModel.ts';
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material';
+import ConsoleModel, {defaultConsoleModel} from '../models/ConsoleModel.ts';
+import {Dispatch, SetStateAction} from 'react';
 
 interface SelectConsoleMenuProps {
   dbConsoles: ConsoleModel[];
-  selectedConsoleId: string | undefined;
+  selectedConsole: ConsoleModel;
+  setSelectedConsole: Dispatch<SetStateAction<ConsoleModel>>;
 }
 
 export default function SelectConsoleMenu(props: Readonly<SelectConsoleMenuProps>) {
-  const {dbConsoles, selectedConsoleId} = props;
+  const {dbConsoles, selectedConsole, setSelectedConsole} = props;
 
-  const getConsoleName = () => {
-    if (selectedConsoleId) {
-      const consoleIds = dbConsoles.map((dbConsole) => dbConsole.id);
-      const indConsoleId = consoleIds.indexOf(selectedConsoleId);
-      if (indConsoleId !== -1) {
-        return consoleIds[indConsoleId];
-      }
+  const handleChange = (event: SelectChangeEvent) => {
+    const chosenConsole = dbConsoles.find((dbConsole) => dbConsole.id === event.target.value);
+    if (chosenConsole) {
+      setSelectedConsole(chosenConsole);
+    } else {
+      setSelectedConsole(defaultConsoleModel);
     }
-    return '';
   };
 
   return (
@@ -29,7 +29,8 @@ export default function SelectConsoleMenu(props: Readonly<SelectConsoleMenuProps
         id={'consoleId'}
         name={'consoleId'}
         labelId={'consoleId'}
-        defaultValue={getConsoleName}
+        value={selectedConsole.id}
+        onChange={handleChange}
       >
         <MenuItem value={''}>None</MenuItem>
         {dbConsoles.map((item) => (

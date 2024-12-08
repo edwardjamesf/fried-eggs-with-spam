@@ -9,10 +9,11 @@ interface NewConsoleFormProps {
   setOpenForm: Dispatch<SetStateAction<boolean>>;
   dbConsoles: ConsoleModel[];
   setDbConsoles: Dispatch<SetStateAction<ConsoleModel[]>>;
+  setSelectedConsole: Dispatch<SetStateAction<ConsoleModel>>;
 }
 
 export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
-  const {openForm, setOpenForm, dbConsoles, setDbConsoles} = props;
+  const {openForm, setOpenForm, dbConsoles, setDbConsoles, setSelectedConsole} = props;
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -30,6 +31,7 @@ export default function NewConsoleForm(props: Readonly<NewConsoleFormProps>) {
           const formJson = Object.fromEntries((formData as any).entries());
           createNewConsole(formJson as ConsoleModel).then((data) => {
             setDbConsoles([data, ...dbConsoles]);
+            setSelectedConsole(data);
           });
           handleCloseForm();
         }

@@ -1,6 +1,6 @@
 export default interface ConsoleModel {
-  id: string | undefined;
-  name: string | undefined;
+  id: string;
+  name: string;
   manufacturer: string | undefined;
   region: string | undefined;
   releaseDate: string | undefined;
@@ -11,8 +11,8 @@ export default interface ConsoleModel {
 }
 
 export const defaultConsoleModel: ConsoleModel = {
-  id: undefined,
-  name: undefined,
+  id: '',
+  name: '',
   manufacturer: undefined,
   region: undefined,
   releaseDate: undefined,

@@ -1,6 +1,6 @@
 export default interface GameModel {
-  id: string | undefined;
-  name: string | undefined;
+  id: string;
+  name: string;
   publisher: string | undefined;
   developer: string | undefined;
   region: string | undefined;
@@ -13,8 +13,8 @@ export default interface GameModel {
 }
 
 export const defaultGameModel: GameModel = {
-  id: undefined,
-  name: undefined,
+  id: '',
+  name: '',
   publisher: undefined,
   developer: undefined,
   region: undefined,
