@@ -36,7 +36,7 @@ export default function PurchasesPage() {
   const [openUpdatePurchaseForm, setOpenUpdatePurchaseForm] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const setSelectedConsoleFromPurchase = () => {
+  const setSelectedConsoleAndGameFromPurchase = () => {
     const purchaseConsole = dbConsoles.find((dbConsole) => dbConsole.id === selectedPurchase?.consoleId);
     if (purchaseConsole) {
       setSelectedConsole(purchaseConsole);
@@ -66,7 +66,7 @@ export default function PurchasesPage() {
         setDbPurchases(data);
         setIsLoaded(true);
       });
-      console.log(new Date() + ': Retrieved data from DB');
+      console.log(new Date() + ': Retrieved purchase data from DB');
     };
     getDbData();
     const intervalId = setInterval(() => {
@@ -106,7 +106,7 @@ export default function PurchasesPage() {
             density={'compact'}
             onCellClick={(params) => {
               setSelectedPurchase(params.row);
-              setSelectedConsoleFromPurchase();
+              setSelectedConsoleAndGameFromPurchase();
               setOpenUpdatePurchaseForm(true);
             }}
           />

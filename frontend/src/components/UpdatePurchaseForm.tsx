@@ -261,10 +261,10 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
         setOpenForm={setOpenNewGameForm}
         dbConsoles={dbConsoles}
         dbGames={dbGames}
+        setDbConsoles={setDbConsoles}
         setDbGames={setDbGames}
         selectedConsole={selectedConsole}
         setSelectedConsole={setSelectedConsole}
-        setSelectedGame={setSelectedGame}
       />
     </>
   );

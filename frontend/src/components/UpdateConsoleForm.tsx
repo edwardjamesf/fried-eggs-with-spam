@@ -11,6 +11,7 @@ interface UpdateConsoleFormProps {
   selectedConsole: ConsoleModel;
   dbConsoles: ConsoleModel[];
   setDbConsoles: Dispatch<SetStateAction<ConsoleModel[]>>;
+  setSelectedConsole: Dispatch<SetStateAction<ConsoleModel>>;
 }
 
 export default function UpdateConsoleForm(props: Readonly<UpdateConsoleFormProps>) {

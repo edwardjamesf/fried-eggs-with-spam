@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Button, Paper} from '@mui/material';
+import {Button, Paper, Typography} from '@mui/material';
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import ConsoleModel from '../models/ConsoleModel.ts';
 import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
@@ -14,7 +14,12 @@ const consoleColumns: GridColDef[] = [
   {field: 'description', headerName: 'Description', flex: 1},
 ];
 
-const paginationModel = {page: 0, pageSize: 10};
+const autosizeOptions = {
+  includeHeaders: true,
+  includeOutliers: true,
+};
+
+const paginationModel = {page: 0, pageSize: 20};
 
 export default function ConsolesPage() {
   const [dbConsoles, setDbConsoles] = useState<ConsoleModel[]>([]);
@@ -24,14 +29,26 @@ export default function ConsolesPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getConsolesFromDbAll().then((data) => {
-      setDbConsoles(data);
-      setIsLoaded(true);
-    });
+    const getDbData = () => {
+      getConsolesFromDbAll().then((data) => {
+        setDbConsoles(data);
+        setIsLoaded(true);
+      });
+      console.log(new Date() + ': Retrieved console data from DB');
+    };
+    getDbData();
+    const intervalId = setInterval(() => {
+      getDbData();
+    }, 60000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
     <div className={'main-table'}>
+
+      {/*Click the button to open up the new console form*/}
       <Button
         sx={{margin: '1em'}}
         variant={'contained'}
@@ -41,35 +58,46 @@ export default function ConsolesPage() {
       >
         Add Console
       </Button>
+
+      {/*If database consoles have been retrieved from DB, then load the table*/}
       <Paper>
-        {isLoaded &&
-            <DataGrid
-                rows={dbConsoles}
-                columns={consoleColumns}
-                initialState={{pagination: {paginationModel}}}
-                pageSizeOptions={[10, 20, 50]}
-                checkboxSelection={false}
-                autosizeOnMount={true}
-                density={'compact'}
-                onCellClick={(params) => {
-                  setSelectedConsole(params.row);
-                  setOpenUpdateConsoleForm(true);
-                }}
-            />
+        {isLoaded ?
+          <DataGrid
+            rows={dbConsoles}
+            columns={consoleColumns}
+            initialState={{pagination: {paginationModel}}}
+            pageSizeOptions={[10, 20, 50]}
+            checkboxSelection={false}
+            autosizeOnMount={true}
+            autosizeOptions={autosizeOptions}
+            density={'compact'}
+            onCellClick={(params) => {
+              setSelectedConsole(params.row);
+              setOpenUpdateConsoleForm(true);
+            }}
+          />
+          :
+          <Typography>Loading Consoles from DB...</Typography>
         }
       </Paper>
+
+      {/*This form adds new consoles to the database*/}
       <UpdateConsoleForm
         openForm={openUpdateConsoleForm}
         setOpenForm={setOpenUpdateConsoleForm}
         selectedConsole={selectedConsole}
         dbConsoles={dbConsoles}
         setDbConsoles={setDbConsoles}
+        setSelectedConsole={setSelectedConsole}
       />
+
+      {/*This form updates existing console data in the database*/}
       <NewConsoleForm
         openForm={openNewConsoleForm}
         setOpenForm={setOpenNewConsoleForm}
         dbConsoles={dbConsoles}
         setDbConsoles={setDbConsoles}
+        setSelectedConsole={setSelectedConsole}
       />
     </div>
   );
