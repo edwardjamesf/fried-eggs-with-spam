@@ -1,6 +1,16 @@
 # fried-eggs-with-spam
 Fried eggs with spam web application
 
+# Change-log
+- Backend
+  - 0.0.0
+    - Initial stable-ish version
+  - 0.1.0
+    - Switch off of local database and use Neon postgres database
+- Frontend
+  - 0.0.0
+    - Initial stable-ish-version
+
 # Building the Backend Docker image (Spring Boot)
 1. Open Docker Desktop and login into Docker Hub
 2. In bash/cli, navigate to the `backend` folder
