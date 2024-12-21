@@ -32,10 +32,10 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#        restart: true
   frontend:
     image: edwardjamesf/fews-vite-dist:latest
     build:
