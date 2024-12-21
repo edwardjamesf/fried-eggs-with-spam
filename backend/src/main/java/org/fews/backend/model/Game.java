@@ -20,4 +20,5 @@ public class Game {
     private UUID consoleId;
     private Instant createdTimestamp;
     private Instant modifiedTimestamp;
+    private String consoleFullName;
 }

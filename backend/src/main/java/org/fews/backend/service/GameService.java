@@ -1,6 +1,7 @@
 package org.fews.backend.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.fews.backend.model.Console;
 import org.fews.backend.model.Game;
 import org.fews.backend.model.GameDto;
 import org.fews.backend.repository.GameRepository;
@@ -13,9 +14,11 @@ import java.util.UUID;
 @Service
 public class GameService {
     private final GameRepository gameRepository;
+    private final ConsoleService consoleService;
 
-    public GameService(GameRepository gameRepository) {
+    public GameService(GameRepository gameRepository, ConsoleService consoleService) {
         this.gameRepository = gameRepository;
+        this.consoleService = consoleService;
     }
 
     public Game createGame(GameDto gameDto) throws SQLException {
@@ -27,6 +30,13 @@ public class GameService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("Game ID " + gameId + " not found");
         }
+        for (Game returnGame : returnList) {
+            UUID consoleId = returnGame.getConsoleId();
+            if (consoleId != null) {
+                Console thisConsole = consoleService.getConsole(consoleId);
+                returnGame.setConsoleFullName(thisConsole.getManufacturer() + " " + thisConsole.getName());
+            }
+        }
         return returnList.getFirst();
     }
 
@@ -34,6 +44,13 @@ public class GameService {
         List<Game> returnList = gameRepository.getGamesAll();
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("No games found in database");
+        }
+        for (Game returnGame : returnList) {
+            UUID consoleId = returnGame.getConsoleId();
+            if (consoleId != null) {
+                Console thisConsole = consoleService.getConsole(consoleId);
+                returnGame.setConsoleFullName(thisConsole.getManufacturer() + " " + thisConsole.getName());
+            }
         }
         return returnList;
     }

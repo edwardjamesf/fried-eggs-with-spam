@@ -608,3 +608,26 @@ end;
 $$ language plpgsql;
 
 select run_integration_test();
+
+-- ----------------------------------------------------------------------------------------------------
+-- build initial set of data
+-- ----------------------------------------------------------------------------------------------------
+drop function if exists build_initial_dataset;
+
+create or replace function build_initial_dataset() returns setof purchases as $$
+declare
+    console_key uuid;
+    game_key uuid;
+begin
+    select id into console_key from insert_console('Saturn', 'Sega', 'Japan', '11/22/1994', 'The Sega Saturn[a][b] is a home video game console developed by Sega and released on November 22, 1994, in Japan, May 11, 1995, in North America, and July 8, 1995, in Europe. Part of the fifth generation of video game consoles, it is the successor to the successful Genesis. The Saturn has a dual-CPU architecture and eight processors. Its games are in CD-ROM format, including several ports of arcade games and original games.', null);
+    select id into game_key from insert_game('Vampire Hunter: Darkstalkers Revenge', 'Capcom', 'Capcom', 'Japan', '03/03/1995', 'Night Warriors: Darkstalkers Revenge, known in Japan as Vampire Hunter: Darkstalkers Revenge[a], is a 1995 arcade fighting game produced by Capcom and the second in the Darkstalkers series, following Darkstalkers: The Night Warriors (1994). Darkstalkers Revenge was ported to the Sega Saturn home console in 1996 and was later followed by a sequel, Vampire Savior / Darkstalkers 3 (1997).', null, console_key);
+	
+	return query
+    select * from insert_purchase('Sega Saturn bundle', '01/19/2021', 133.99, 10.38, 0.0, 0.0, 'Ebay', 'Grey Japanese model 1 Saturn with blue buttons. Includes power and composite video cables, 1 controller, and Vampire Hunter. Slightly yellowed.', null, console_key, game_key);
+    return;
+end;
+$$ language plpgsql;
+
+/* Run me
+select build_initial_dataset();
+*/

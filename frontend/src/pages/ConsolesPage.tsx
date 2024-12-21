@@ -46,7 +46,7 @@ export default function ConsolesPage() {
   }, []);
 
   return (
-    <div className={'main-table'}>
+    <div className={'page-div'}>
 
       {/*Click the button to open up the new console form*/}
       <Button

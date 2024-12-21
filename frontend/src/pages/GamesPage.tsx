@@ -10,9 +10,9 @@ import UpdateGameForm from '../components/UpdateGameForm.tsx';
 
 const gameColumns: GridColDef[] = [
   {field: 'name', headerName: 'Game Name'},
+  {field: 'consoleFullName', headerName: 'Console'},
   {field: 'region', headerName: 'Region'},
   {field: 'releaseDate', headerName: 'Release Date'},
-  {field: 'consoleId', headerName: 'Console ID'},
   {field: 'description', headerName: 'Description', flex: 1},
 ];
 
@@ -60,7 +60,7 @@ export default function GamesPage() {
   }, []);
 
   return (
-    <div className={'main-table'}>
+    <div className={'page-div'}>
       {/*Click the button to open up the new game form*/}
       <Button
         sx={{margin: '1em'}}

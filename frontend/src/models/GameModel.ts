@@ -10,6 +10,7 @@ export default interface GameModel {
   consoleId: string | undefined;
   createdAt: string | undefined;
   modifiedAt: string | undefined;
+  consoleFullName: string | undefined;
 }
 
 export const defaultGameModel: GameModel = {
@@ -24,4 +25,5 @@ export const defaultGameModel: GameModel = {
   consoleId: undefined,
   createdAt: undefined,
   modifiedAt: undefined,
+  consoleFullName: undefined,
 };
