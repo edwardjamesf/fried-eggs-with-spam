@@ -82,6 +82,38 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
           <DialogContent sx={{paddingBottom: '1em'}}>
             Define information for the new purchase here.
           </DialogContent>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewGameForm(true);
+              }}
+            >
+              New Game
+            </Button>
+            <SelectGameMenu
+              dbGames={dbGames}
+              selectedGame={selectedGame}
+              setSelectedGame={setSelectedGame}
+            />
+          </Box>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
+            >
+              New Console
+            </Button>
+            <SelectConsoleMenu
+              dbConsoles={dbConsoles}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
+            />
+          </Box>
           <TextField
             autoFocus
             required
@@ -156,38 +188,6 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
             rows={4}
             fullWidth
           />
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewConsoleForm(true);
-              }}
-            >
-              New Console
-            </Button>
-            <SelectConsoleMenu
-              dbConsoles={dbConsoles}
-              selectedConsole={selectedConsole}
-              setSelectedConsole={setSelectedConsole}
-            />
-          </Box>
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewGameForm(true);
-              }}
-            >
-              New Game
-            </Button>
-            <SelectGameMenu
-              dbGames={dbGames}
-              selectedGame={selectedGame}
-              setSelectedGame={setSelectedGame}
-            />
-          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseNewPurchaseForm}>Cancel</Button>
@@ -212,6 +212,7 @@ export default function NewPurchaseForm(props: Readonly<NewPurchaseFormProps>) {
         setDbGames={setDbGames}
         selectedConsole={selectedConsole}
         setSelectedConsole={setSelectedConsole}
+        setSelectedGame={setSelectedGame}
       />
     </>
   );

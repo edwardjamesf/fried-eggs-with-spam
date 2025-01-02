@@ -25,6 +25,7 @@ interface NewGameFormProps {
   setDbGames: Dispatch<SetStateAction<GameModel[]>>;
   selectedConsole: ConsoleModel;
   setSelectedConsole: Dispatch<SetStateAction<ConsoleModel>>;
+  setSelectedGame: Dispatch<SetStateAction<GameModel>>;
 }
 
 export default function NewGameForm(props: Readonly<NewGameFormProps>) {
@@ -37,6 +38,7 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
     setDbGames,
     selectedConsole,
     setSelectedConsole,
+    setSelectedGame,
   } = props;
 
   const [openNewConsoleForm, setOpenNewConsoleForm] = useState(false);
@@ -58,6 +60,7 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
             const formJson = Object.fromEntries((formData as any).entries());
             createNewGame(formJson as GameModel).then((data) => {
               setDbGames([data, ...dbGames]);
+              setSelectedGame(data);
             });
             handleCloseForm();
           }
