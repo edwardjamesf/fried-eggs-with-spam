@@ -18,7 +18,7 @@ Fried eggs with spam web application
 * In bash/cli, navigate to the `backend` folder
 * Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
   ```
-  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> .
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> . && docker image prune -a
   ```
 * In Docker Desktop, go to Images tab and push the new images to Docker Hub 
 
@@ -27,7 +27,7 @@ Fried eggs with spam web application
 * In bash/cli, navigate to the `frontend` folder
 * Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
   ```
-  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> .
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> . && docker image prune -a
   ```
 * In Docker Desktop, go to Images tab and push the new images to Docker Hub
 
@@ -39,10 +39,7 @@ Fried eggs with spam web application
 4. Navigate to project folder (ex: ~/git_repos/fried-eggs-with-spam)
 5. Run the following commands on the target environment:
 ```
-docker container stop frontend backend
-docker compose rm
-docker compose pull
-docker compose up -d
+docker container stop frontend backend && docker compose rm -f && docker compose pull && docker compose up -d
 ```
   - `docker container stop <container-name>` will stop the specified containers
   - `docker compose rm` will remove all stopped containers listed in the compose.yml file
