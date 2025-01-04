@@ -10,8 +10,8 @@ Fried eggs with spam web application
 - Frontend
   - 0.0.0
     - Initial stable-ish-version
-  - 0.0.1
-    - Bugfix: New game button auto-populates dropdown menu in new purchase form
+  - 0.1.0
+    - Update to match backend 0.1.0 version
 
 # Building the Backend Docker image (Spring Boot)
 * Open Docker Desktop and login into Docker Hub
