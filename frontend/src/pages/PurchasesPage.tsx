@@ -23,7 +23,7 @@ const autosizeOptions = {
   includeOutliers: true,
 };
 
-const paginationModel = {page: 0, pageSize: 20};
+const paginationModel = {page: 0, pageSize: 10};
 
 export default function PurchasesPage() {
   const [dbConsoles, setDbConsoles] = useState<ConsoleModel[]>([]);
@@ -93,7 +93,7 @@ export default function PurchasesPage() {
       </Button>
 
       {/*If database purchases have been retrieved from DB, then load the table*/}
-      <Paper>
+      <Paper className={'page-table'}>
         {isLoaded ?
           <DataGrid
             rows={dbPurchases}

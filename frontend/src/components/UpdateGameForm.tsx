@@ -99,6 +99,22 @@ export default function UpdateGameForm(props: Readonly<UpdateGameFormProps>) {
           <DialogContentText sx={{paddingBottom: '1em'}}>
             Update information for {selectedGame?.name} here.
           </DialogContentText>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
+            >
+              New Console
+            </Button>
+            <SelectConsoleMenu
+              dbConsoles={dbConsoles}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
+            />
+          </Box>
           <TextField
             margin={'dense'}
             id={'id'}
@@ -163,22 +179,6 @@ export default function UpdateGameForm(props: Readonly<UpdateGameFormProps>) {
             fullWidth
             defaultValue={selectedGame?.description}
           />
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewConsoleForm(true);
-              }}
-            >
-              New Console
-            </Button>
-            <SelectConsoleMenu
-              dbConsoles={dbConsoles}
-              selectedConsole={selectedConsole}
-              setSelectedConsole={setSelectedConsole}
-            />
-          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseForm}>Cancel</Button>

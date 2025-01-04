@@ -122,6 +122,38 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           <DialogContentText sx={{paddingBottom: '1em'}}>
             Update information for purchase "{selectedPurchase?.name}" here.
           </DialogContentText>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
+            >
+              New Console
+            </Button>
+            <SelectConsoleMenu
+              dbConsoles={dbConsoles}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
+            />
+          </Box>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewGameForm(true);
+              }}
+            >
+              New Game
+            </Button>
+            <SelectGameMenu
+              dbGames={dbGames}
+              selectedGame={selectedGame}
+              setSelectedGame={setSelectedGame}
+            />
+          </Box>
           <TextField
             margin={'dense'}
             id={'id'}
@@ -208,38 +240,6 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
             fullWidth
             defaultValue={selectedPurchase?.notes}
           />
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewConsoleForm(true);
-              }}
-            >
-              New Console
-            </Button>
-            <SelectConsoleMenu
-              dbConsoles={dbConsoles}
-              selectedConsole={selectedConsole}
-              setSelectedConsole={setSelectedConsole}
-            />
-          </Box>
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewGameForm(true);
-              }}
-            >
-              New Game
-            </Button>
-            <SelectGameMenu
-              dbGames={dbGames}
-              selectedGame={selectedGame}
-              setSelectedGame={setSelectedGame}
-            />
-          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseUpdateForm}>Cancel</Button>

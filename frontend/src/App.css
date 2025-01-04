@@ -83,7 +83,15 @@ button {
 
 .page-div {
     position: fixed;
-    top: 100px;
-    width: 75vw;
-    transform: translate(-50%, 0%);
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -40%);
+    overflow-y: scroll;
+}
+
+.page-table {
+    /*position: fixed;*/
+    /*width: 75vw;*/
+    /*height: 100vh;*/
+    /*transform: translate(15%, 0%);*/
 }

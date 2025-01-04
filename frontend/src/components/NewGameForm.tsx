@@ -71,6 +71,22 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
           <DialogContentText sx={{paddingBottom: '1em'}}>
             Define information for the new game here.
           </DialogContentText>
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
+            >
+              New Console
+            </Button>
+            <SelectConsoleMenu
+              dbConsoles={dbConsoles}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
+            />
+          </Box>
           <TextField
             autoFocus
             required
@@ -120,22 +136,6 @@ export default function NewGameForm(props: Readonly<NewGameFormProps>) {
             rows={4}
             fullWidth
           />
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewConsoleForm(true);
-              }}
-            >
-              New Console
-            </Button>
-            <SelectConsoleMenu
-              dbConsoles={dbConsoles}
-              selectedConsole={selectedConsole}
-              setSelectedConsole={setSelectedConsole}
-            />
-          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseForm}>Cancel</Button>
