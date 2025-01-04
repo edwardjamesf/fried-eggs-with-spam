@@ -10,20 +10,26 @@ Fried eggs with spam web application
 - Frontend
   - 0.0.0
     - Initial stable-ish-version
+  - 0.0.1
+    - Bugfix: New game button auto-populates dropdown menu in new purchase form
 
 # Building the Backend Docker image (Spring Boot)
-1. Open Docker Desktop and login into Docker Hub
-2. In bash/cli, navigate to the `backend` folder
-3. Run the following command to build the image: `docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> .`
-  - Change the image version tag to represent the appropriate version (ex: 0.0.0)
-4. In Docker Desktop, go to Images tab and push the new images to Docker Hub 
+* Open Docker Desktop and login into Docker Hub
+* In bash/cli, navigate to the `backend` folder
+* Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
+  ```
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> .
+  ```
+* In Docker Desktop, go to Images tab and push the new images to Docker Hub 
 
 # Building the Frontend Docker image (Vite)
-1. Open Docker Desktop and login into Docker Hub
-1. In bash/cli, navigate to the `frontend` folder
-2. Run the following command to build the image: `docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> .`
-  - Change the image version tag to represent the appropriate version (ex: 0.0.0)
-3. In Docker Desktop, go to Images tab and push the new images to Docker Hub
+* Open Docker Desktop and login into Docker Hub
+* In bash/cli, navigate to the `frontend` folder
+* Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
+  ```
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> .
+  ```
+* In Docker Desktop, go to Images tab and push the new images to Docker Hub
 
 # Deploying on the target environment
 1. If .env file does not exist, then make a copy of .env-sample and enter in your credentials for the DB
