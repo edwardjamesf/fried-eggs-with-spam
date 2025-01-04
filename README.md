@@ -18,7 +18,7 @@ Fried eggs with spam web application
 * In bash/cli, navigate to the `backend` folder
 * Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
   ```
-  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> . && docker image prune -a
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-spring-boot:latest -t edwardjamesf/fews-spring-boot:<tag> . && docker image prune -f
   ```
 * In Docker Desktop, go to Images tab and push the new images to Docker Hub 
 
@@ -27,7 +27,7 @@ Fried eggs with spam web application
 * In bash/cli, navigate to the `frontend` folder
 * Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
   ```
-  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> . && docker image prune -a
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> . && docker image prune -f
   ```
 * In Docker Desktop, go to Images tab and push the new images to Docker Hub
 
