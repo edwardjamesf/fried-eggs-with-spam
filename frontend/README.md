@@ -1,3 +1,21 @@
+# Fried Eggs with Spam Webpage
+Fried eggs with spam ReactTS+Vite webpage
+
+# Change-log
+  - 0.0.0
+    - Initial stable-ish-version
+  - 0.1.0
+    - Update to match backend 0.1.0 version
+
+# Building the Frontend Docker image
+* Open Docker Desktop and login into Docker Hub
+* In bash/cli, navigate to the `frontend` folder
+* Run the following command to build the image. Note: Change the image version \<tag\> to represent the appropriate version (ex: 0.0.0)
+  ```
+  docker buildx build --no-cache --platform=linux/arm64 --pull -t edwardjamesf/fews-vite-dist:latest -t edwardjamesf/fews-vite-dist:<tag> . && docker image prune -f
+  ```
+* In Docker Desktop, go to Images tab and push the new images to Docker Hub
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
