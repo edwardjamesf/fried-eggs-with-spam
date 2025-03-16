@@ -122,22 +122,15 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
           <DialogContentText sx={{paddingBottom: '1em'}}>
             Update information for purchase "{selectedPurchase?.name}" here.
           </DialogContentText>
-          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Button
-              sx={{marginRight: '1em', width: '40%'}}
-              variant={'contained'}
-              onClick={() => {
-                setOpenNewConsoleForm(true);
-              }}
-            >
-              New Console
-            </Button>
-            <SelectConsoleMenu
-              dbConsoles={dbConsoles}
-              selectedConsole={selectedConsole}
-              setSelectedConsole={setSelectedConsole}
-            />
-          </Box>
+          <TextField
+            margin={'dense'}
+            id={'id'}
+            name={'id'}
+            label={'ID (read-only)'}
+            type={'text'}
+            fullWidth
+            value={selectedPurchase?.id}
+          />
           <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
             <Button
               sx={{marginRight: '1em', width: '40%'}}
@@ -154,15 +147,22 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
               setSelectedGame={setSelectedGame}
             />
           </Box>
-          <TextField
-            margin={'dense'}
-            id={'id'}
-            name={'id'}
-            label={'ID (read-only)'}
-            type={'text'}
-            fullWidth
-            value={selectedPurchase?.id}
-          />
+          <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Button
+              sx={{marginRight: '1em', width: '40%'}}
+              variant={'contained'}
+              onClick={() => {
+                setOpenNewConsoleForm(true);
+              }}
+            >
+              New Console
+            </Button>
+            <SelectConsoleMenu
+              dbConsoles={dbConsoles}
+              selectedConsole={selectedConsole}
+              setSelectedConsole={setSelectedConsole}
+            />
+          </Box>
           <TextField
             autoFocus
             required
@@ -248,14 +248,6 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
         </DialogActions>
       </Dialog>
 
-      <NewConsoleForm
-        openForm={openNewConsoleForm}
-        setOpenForm={setOpenNewConsoleForm}
-        dbConsoles={dbConsoles}
-        setDbConsoles={setDbConsoles}
-        setSelectedConsole={setSelectedConsole}
-      />
-
       <NewGameForm
         openForm={openNewGameForm}
         setOpenForm={setOpenNewGameForm}
@@ -264,6 +256,15 @@ export default function UpdatePurchaseForm(props: Readonly<UpdatePurchaseFormPro
         setDbConsoles={setDbConsoles}
         setDbGames={setDbGames}
         selectedConsole={selectedConsole}
+        setSelectedConsole={setSelectedConsole}
+        setSelectedGame={setSelectedGame}
+      />
+
+      <NewConsoleForm
+        openForm={openNewConsoleForm}
+        setOpenForm={setOpenNewConsoleForm}
+        dbConsoles={dbConsoles}
+        setDbConsoles={setDbConsoles}
         setSelectedConsole={setSelectedConsole}
       />
     </>
