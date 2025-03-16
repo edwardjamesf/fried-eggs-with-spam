@@ -12,6 +12,8 @@ Fried eggs with spam web application
     - Initial stable-ish-version
   - 0.1.0
     - Update to match backend 0.1.0 version
+  - 0.1.1
+    - Better sorting by purchase dates
 
 # Building the Backend Docker image (Spring Boot)
 * Open Docker Desktop and login into Docker Hub
