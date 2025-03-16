@@ -38,17 +38,15 @@ export default function GamesPage() {
 
   useEffect(() => {
     const getDbData = () => {
-      getConsolesFromDbAll()
-        .then((data) => {
-          setDbConsoles(data);
-        });
+      getConsolesFromDbAll().then((data) => {
+        setDbConsoles(data);
+      });
 
       getGamesFromDbAll().then((data) => {
         setDbGames(data);
         setIsLoaded(true);
       });
-
-      console.log(new Date() + ': Retrieved game data from DB');
+      console.log(new Date() + ': Retrieved purchase data from DB');
     };
     getDbData();
     const intervalId = setInterval(() => {
@@ -74,13 +72,13 @@ export default function GamesPage() {
       </Button>
 
       {/*If database games have been retrieved from DB, then load the table*/}
-      <Paper>
+      <Paper className={'page-table'}>
         {isLoaded ?
           <DataGrid
             rows={dbGames}
             columns={gameColumns}
             initialState={{pagination: {paginationModel}}}
-            pageSizeOptions={[10, 20, 50]}
+            pageSizeOptions={[10, 25, 50]}
             checkboxSelection={false}
             autosizeOnMount={true}
             density={'compact'}
@@ -118,6 +116,7 @@ export default function GamesPage() {
         setDbGames={setDbGames}
         selectedConsole={selectedConsole}
         setSelectedConsole={setSelectedConsole}
+        setSelectedGame={setSelectedGame}
       />
     </div>
   );

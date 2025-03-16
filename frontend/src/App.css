@@ -1,5 +1,6 @@
 #root {
-    max-width: 1280px;
+    max-height: 100vh;
+    max-width: 100vw;
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
@@ -84,14 +85,13 @@ button {
 .page-div {
     position: fixed;
     width: 100vw;
-    height: 100vh;
-    transform: translate(-50%, -40%);
+    height: 95vh;
+    transform: translate(-50%, -47.5%);
     overflow-y: scroll;
 }
 
 .page-table {
-    /*position: fixed;*/
-    /*width: 75vw;*/
-    /*height: 100vh;*/
-    /*transform: translate(15%, 0%);*/
+    position: fixed;
+    width: 75vw;
+    transform: translate(15%, 0%);
 }

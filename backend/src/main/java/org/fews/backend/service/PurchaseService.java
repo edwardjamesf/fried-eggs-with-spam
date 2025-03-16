@@ -4,9 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.fews.backend.model.Purchase;
 import org.fews.backend.model.PurchaseDto;
 import org.fews.backend.repository.PurchaseRepository;
+import org.fews.backend.utility.Utilities;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,8 @@ public class PurchaseService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("Purchase ID " + purchaseId + " not found");
         }
+        Utilities.formatDates(returnList);
+        returnList.sort(Comparator.comparing(Purchase::getPurchaseDate).reversed());
         return returnList.getFirst();
     }
 
@@ -35,6 +39,8 @@ public class PurchaseService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("No purchases found in database");
         }
+        Utilities.formatDates(returnList);
+        returnList.sort(Comparator.comparing(Purchase::getPurchaseDate).reversed());
         return returnList;
     }
 
@@ -43,6 +49,8 @@ public class PurchaseService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("No purchases found in database");
         }
+        Utilities.formatDates(returnList);
+        returnList.sort(Comparator.comparing(Purchase::getPurchaseDate).reversed());
         return returnList;
     }
 

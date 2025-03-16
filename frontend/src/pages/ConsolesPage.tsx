@@ -60,13 +60,13 @@ export default function ConsolesPage() {
       </Button>
 
       {/*If database consoles have been retrieved from DB, then load the table*/}
-      <Paper>
+      <Paper className={'page-table'}>
         {isLoaded ?
           <DataGrid
             rows={dbConsoles}
             columns={consoleColumns}
             initialState={{pagination: {paginationModel}}}
-            pageSizeOptions={[10, 20, 50]}
+            pageSizeOptions={[10, 25, 50]}
             checkboxSelection={false}
             autosizeOnMount={true}
             autosizeOptions={autosizeOptions}

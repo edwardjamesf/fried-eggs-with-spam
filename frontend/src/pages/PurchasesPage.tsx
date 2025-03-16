@@ -9,10 +9,11 @@ import {getConsolesFromDbAll} from '../api/ConsoleApi.ts';
 import ConsoleModel, {defaultConsoleModel} from '../models/ConsoleModel.ts';
 import GameModel, {defaultGameModel} from '../models/GameModel.ts';
 import {getGamesFromDbAll} from '../api/GameApi.ts';
+import moment from 'moment';
 
 const purchaseColumns: GridColDef[] = [
   {field: 'name', headerName: 'Name'},
-  {field: 'purchaseDate', headerName: 'Purchase Date'},
+  {field: 'purchaseDate', headerName: 'Purchase Date', valueFormatter: value => moment(new Date(value)).format('YYYY-MM-DD')},
   {field: 'purchaseFrom', headerName: 'From'},
   {field: 'costTotal', headerName: 'Cost'},
   {field: 'notes', headerName: 'Notes', flex: 1},
@@ -99,7 +100,7 @@ export default function PurchasesPage() {
             rows={dbPurchases}
             columns={purchaseColumns}
             initialState={{pagination: {paginationModel}}}
-            pageSizeOptions={[10, 20, 50]}
+            pageSizeOptions={[10, 25, 50]}
             checkboxSelection={false}
             autosizeOnMount={true}
             autosizeOptions={autosizeOptions}
