@@ -7,6 +7,10 @@ Fried eggs with spam web application
     - Initial stable-ish version
   - 0.1.0
     - Switch off of local database and use Neon postgres database
+  - 0.1.1
+    - Better sorting by purchase dates
+  - 0.1.2
+    - Sorts games and consoles in select game and console dropdowns
 - Frontend
   - 0.0.0
     - Initial stable-ish-version
@@ -14,6 +18,8 @@ Fried eggs with spam web application
     - Update to match backend 0.1.0 version
   - 0.1.1
     - Better sorting by purchase dates
+  - 0.1.2
+    - Sorts games and consoles in select game and console dropdowns
 
 # Building the Backend Docker image (Spring Boot)
 * Open Docker Desktop and login into Docker Hub

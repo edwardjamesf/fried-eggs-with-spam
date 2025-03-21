@@ -18,4 +18,5 @@ public class Console {
     private UUID imageId;
     private Instant createdTimestamp;
     private Instant modifiedTimestamp;
+    private String fullName;
 }

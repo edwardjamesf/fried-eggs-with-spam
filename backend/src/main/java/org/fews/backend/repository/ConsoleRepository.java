@@ -37,6 +37,7 @@ public class ConsoleRepository {
                         .imageId((UUID) resultSet.getObject("image_id"))
                         .createdTimestamp(((Timestamp) resultSet.getObject("created_timestamp")).toInstant())
                         .modifiedTimestamp(((Timestamp) resultSet.getObject("modified_timestamp")).toInstant())
+                        .fullName(String.format("%s %s (%s)", resultSet.getString("manufacturer"), resultSet.getString("name"), resultSet.getString("region")))
                         .build();
 
                 consoles.add(console);

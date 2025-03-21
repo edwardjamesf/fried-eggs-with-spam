@@ -33,12 +33,12 @@ export default function SelectGameMenu(props: Readonly<SelectGameMenuProps>) {
         onChange={handleChange}
       >
         <MenuItem value={''}>None</MenuItem>
-        {dbGames.map((item) => (
+        {dbGames.map((item : GameModel) => (
           <MenuItem
             value={item.id}
             key={item.id}
           >
-            {item.name} ({item.region})
+            {item.gameFullName}
           </MenuItem>
         ))}
       </Select>

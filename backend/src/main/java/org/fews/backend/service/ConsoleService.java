@@ -7,6 +7,7 @@ import org.fews.backend.repository.ConsoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class ConsoleService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("Console ID " + consoleId + " not found");
         }
+        returnList.sort(Comparator.comparing(Console::getFullName));
         return returnList.getFirst();
     }
 
@@ -35,6 +37,7 @@ public class ConsoleService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("No consoles found in database");
         }
+        returnList.sort(Comparator.comparing(Console::getFullName));
         return returnList;
     }
 

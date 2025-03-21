@@ -53,22 +53,23 @@ export default function PurchasesPage() {
     }
   };
 
+  const getDbData = () => {
+    getConsolesFromDbAll().then((data) => {
+      setDbConsoles(data);
+    });
+
+    getGamesFromDbAll().then((data) => {
+      setDbGames(data);
+    });
+
+    getPurchasesFromDbAll().then((data) => {
+      setDbPurchases(data);
+      setIsLoaded(true);
+    });
+    console.log(new Date() + ': Retrieved purchase data from DB');
+  };
+
   useEffect(() => {
-    const getDbData = () => {
-      getConsolesFromDbAll().then((data) => {
-        setDbConsoles(data);
-      });
-
-      getGamesFromDbAll().then((data) => {
-        setDbGames(data);
-      });
-
-      getPurchasesFromDbAll().then((data) => {
-        setDbPurchases(data);
-        setIsLoaded(true);
-      });
-      console.log(new Date() + ': Retrieved purchase data from DB');
-    };
     getDbData();
     const intervalId = setInterval(() => {
       getDbData();

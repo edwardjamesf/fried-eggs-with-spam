@@ -8,6 +8,7 @@ import org.fews.backend.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,18 +26,26 @@ public class GameService {
         return gameRepository.createGame(gameDto).getFirst();
     }
 
+    private void buildGameFullName(List<Game> games) throws SQLException {
+        for (Game game : games) {
+            UUID consoleId = game.getConsoleId();
+            String consoleName = "";
+            if (consoleId != null) {
+                Console thisConsole = consoleService.getConsole(consoleId);
+                consoleName = thisConsole.getName();
+            }
+            String gameFullName = String.format("%s (%s) [%s]", game.getName(), game.getRegion(), consoleName);
+            game.setGameFullName(gameFullName);
+        }
+    }
+
     public Game getGame(UUID gameId) throws SQLException {
         List<Game> returnList = gameRepository.getGame(gameId);
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("Game ID " + gameId + " not found");
         }
-        for (Game returnGame : returnList) {
-            UUID consoleId = returnGame.getConsoleId();
-            if (consoleId != null) {
-                Console thisConsole = consoleService.getConsole(consoleId);
-                returnGame.setConsoleFullName(thisConsole.getManufacturer() + " " + thisConsole.getName());
-            }
-        }
+        buildGameFullName(returnList);
+        returnList.sort(Comparator.comparing(Game::getName));
         return returnList.getFirst();
     }
 
@@ -45,13 +54,8 @@ public class GameService {
         if (returnList.isEmpty()) {
             throw new EntityNotFoundException("No games found in database");
         }
-        for (Game returnGame : returnList) {
-            UUID consoleId = returnGame.getConsoleId();
-            if (consoleId != null) {
-                Console thisConsole = consoleService.getConsole(consoleId);
-                returnGame.setConsoleFullName(thisConsole.getManufacturer() + " " + thisConsole.getName());
-            }
-        }
+        buildGameFullName(returnList);
+        returnList.sort(Comparator.comparing(Game::getName));
         return returnList;
     }
 

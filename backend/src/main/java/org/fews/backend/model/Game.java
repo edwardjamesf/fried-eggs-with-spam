@@ -21,4 +21,5 @@ public class Game {
     private Instant createdTimestamp;
     private Instant modifiedTimestamp;
     private String consoleFullName;
+    private String gameFullName;
 }
