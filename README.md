@@ -20,6 +20,8 @@ Fried eggs with spam web application
     - Better sorting by purchase dates
   - 0.1.2
     - Sorts games and consoles in select game and console dropdowns
+  - 0.1.3
+    - Connect to local database instead of Neon
 
 # Building the Backend Docker image (Spring Boot)
 * Open Docker Desktop and login into Docker Hub
